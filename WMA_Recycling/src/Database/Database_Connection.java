@@ -49,6 +49,20 @@ public class Database_Connection {
         }
     }
     
+    
+    
+    public boolean ExecutionQuery(String Query) {
+        try {
+            Statement st = conn.createStatement();
+            int result = st.executeUpdate(Query);
+            return (result > 0);
+        } catch (SQLException ex) {
+            Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
+    
     public int login(String s, String user, String pass) {
         int log = 1;
         try {
@@ -70,5 +84,65 @@ public class Database_Connection {
         }
         return log;
 
+    }
+    
+    public String[] GetArea(String Query,String QueryCount) {
+    	try {
+    		ps=conn.prepareStatement(QueryCount);
+    		rs=ps.executeQuery(); 
+    		rs.next();    		
+    		int size = rs.getInt("count(*)");
+    		String[] AreaList= new String[size];
+    		
+    		PreparedStatement ps1=conn.prepareStatement(Query);
+    		ResultSet rs1=ps1.executeQuery();
+    		int i=0;
+    		while(rs1.next()) {
+    			
+    			AreaList[i]=rs1.getString("Area");
+    			GetSubArea(rs1.getInt("Area_ID"));
+    			i++;
+    		}
+    		ps1.close();
+    		rs1.close();
+    		return AreaList;
+    		
+    	}catch(SQLException ex) {    		
+    		
+    		System.out.println(ex.getMessage());
+    		return null;
+    	}
+    	
+    	
+    }
+    
+    public String[] GetSubArea(int area_ID) {
+    	
+    	try {
+    		ps=conn.prepareStatement("select count(*) from subarea where Area_ID="+area_ID);
+    		rs=ps.executeQuery(); 
+    		rs.next();    		
+    		int size = rs.getInt("count(*)");
+    		String[] SubList= new String[size];
+    		
+    		PreparedStatement ps1=conn.prepareStatement("select * from subarea where Area_ID="+area_ID);
+    		ResultSet rs1=ps1.executeQuery();
+    		int i=0;
+    		while(rs1.next()) {
+    			
+    			SubList[i]=rs1.getString("Subarea");
+    			i++;
+    		}
+    		ps1.close();
+    		rs1.close();
+    		return SubList;
+    		
+    	}catch(SQLException ex) {    		
+    		
+    		System.out.println(ex.getMessage());
+    		return null;
+    	}
+    	
+    	
     }
 }

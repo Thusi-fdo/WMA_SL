@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.EventQueue;
 
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -12,6 +13,7 @@ import javax.swing.JTextField;
 import Code.Login;
 import Code.Resident;
 import Database.Login_Query;
+import java.sql.*;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
