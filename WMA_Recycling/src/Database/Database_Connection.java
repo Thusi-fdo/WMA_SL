@@ -149,35 +149,84 @@ public class Database_Connection {
     	
     	
     }
-
+    
+    
+    
 
 	public List<Question> GetQuestions(String sqlQuery) {
-		List<Question> quesArray = new ArrayList<Question>();
+		List<Question> questionList = new ArrayList<Question>();
+		String[] Options;
+		Question q;
     	try {
             
     		PreparedStatement psQues = conn.prepareStatement(sqlQuery);
             ResultSet rsQues = psQues.executeQuery();
             while(rsQues.next()){
 				// System.out.println(rs.getString("Question"));	///""+rs.getInt("QID")+"\t"+
-				//Question q = new Question(rsQues.getInt("QID"),rsQues.getString("Question"),null,null);
-				q.setQuestion();	
-				
-				String[] Options=fetchOptions(rsQues.getInt("QID"));				
-				q.setOptions(Options);
-				quesArray.add(q);
+				String type=rsQues.getString("q_type");
+            	if (type.equalsIgnoreCase("JComboBox")) {
+            		
+            		Options=GetOptions(rsQues.getInt("QID"));
+            		String Q =rsQues.getString("Question");
+            		q = new Question(rsQues.getInt("QID"),Q,Options);
+            		
+            	}
+            	else {
+            		
+            		q = new Question(rsQues.getInt("QID"),rsQues.getString("Question"));
+            	}
+            	
+            	questionList.add(q);
             					 
 			  }                  
             rsQues.close();
             psQues.close();
             
-            return quesArray;
+            return questionList;
         
         }
     	catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e+"Eroor here");
             return null;
             }
        
         
 	}
+	
+	
+	public String[] GetOptions(int qid) {
+    	try {
+
+    		PreparedStatement ps1 = conn.prepareStatement("select * from options where QID="+qid);
+    		ResultSet rs1 = ps1.executeQuery();
+    		Statement stmt = conn.createStatement();
+    		ResultSet Count = stmt.executeQuery("select count(*) from options where QID="+qid);
+    		Count.next();
+    		
+    		int size = Count.getInt("count(*)");
+    		String[] options=new String[size];
+    		int i=0;
+    		while(rs1.next()){
+    			
+    			
+    			
+    			options[i]=rs1.getString("Description");
+    			i++;
+    			
+    			
+    		 }
+        
+    		ps1.close();
+    		rs1.close();
+    		return options;
+    		
+    	}
+    	
+    	catch(Exception ex) {
+    		
+    		System.out.println(ex);
+            return null;
+    	}
+    	
+    }
 }

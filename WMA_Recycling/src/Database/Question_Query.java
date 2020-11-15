@@ -16,8 +16,8 @@ public class Question_Query {
 	    
 	    public List<Question> PrepareQuestions(){
 	        
-	        String QueryA="SELECT * FROM survey_question";
+	        String Query="SELECT QID,Question,q_type FROM survey_question";
 	        
-	        return db.fetchQuestions(QueryA);    
+	        return db.GetQuestions(Query);    
 	    }
 }

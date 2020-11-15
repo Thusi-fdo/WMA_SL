@@ -60,16 +60,6 @@ public class Resident_Page1 {
 		spinner.setBounds(61, 249, 45, 20);
 		panel.add(spinner);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\wplogo.png"));
-		lblNewLabel.setBounds(279, 11, 70, 100);
-		panel.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\wmalogo.png"));
-		lblNewLabel_1.setBounds(362, 11, 100, 100);
-		panel.add(lblNewLabel_1);
-		
 		JLabel lblNewLabel_2 = new JLabel("City or Region:");
 		lblNewLabel_2.setFont(new Font("SansSerif", Font.BOLD, 16));
 		lblNewLabel_2.setBounds(118, 127, 125, 21);

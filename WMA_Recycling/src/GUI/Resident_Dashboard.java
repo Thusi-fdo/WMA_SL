@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -13,6 +14,8 @@ import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Resident_Dashboard {
 
@@ -79,22 +82,21 @@ public class Resident_Dashboard {
 		panel_1.add(btnNewButton_3);
 		
 		JButton btnNewButton_4 = new JButton("Survey");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				Survey_Questions qUI= new Survey_Questions(); //change Survey_Questions into other ui 
+				qUI.frame.setVisible(true);
+				frame.dispose();
+				
+			}
+		});
 		btnNewButton_4.setBounds(7, 94, 89, 23);
 		panel_1.add(btnNewButton_4);
 		
 		JButton btnNewButton_5 = new JButton("Graphs");
 		btnNewButton_5.setBounds(7, 147, 89, 23);
 		panel_1.add(btnNewButton_5);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\wplogo.png"));
-		lblNewLabel_1.setBounds(7, 193, 70, 100);
-		panel_1.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\wmalogo.png"));
-		lblNewLabel_2.setBounds(7, 304, 100, 100);
-		panel_1.add(lblNewLabel_2);
 		
 		JButton btnNewButton = new JButton("Upload");
 		btnNewButton.setBackground(new Color(51, 255, 153));
@@ -138,4 +140,6 @@ public class Resident_Dashboard {
 		lblNewLabel_7.setBounds(0, 0, 733, 415);
 		panel.add(lblNewLabel_7);
 	}
+	
+	
 }

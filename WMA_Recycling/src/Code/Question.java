@@ -1,23 +1,31 @@
 package Code;
 
 public class Question {
-	private String questionID;
+	private int questionID;
 	private String Question;
 	private String[] Choices;
 	private String Answer;
 	
-	public Question(String qid, String question, String[] choices, String answer) {
+	public Question(int qid, String question, String[] choices) {
 		questionID = qid; 
 		Question = question;
-		Choices = choices;
-		Answer = answer;     
+		Choices = choices;		     
+	}
+	
+	
+
+	public Question(int questionID, String question) {
+		this.questionID = questionID;
+		Question = question;
 	}
 
-	public String getQID() {
+
+
+	public int getQID() {
 		return questionID;
 	}
 
-	public void setQID(String qid) {
+	public void setQID(int qid) {
 		questionID = qid;
 	}
 

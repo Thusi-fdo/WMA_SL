@@ -56,7 +56,7 @@ public class Resident_Feedback {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel_5 = new JLabel("KK is soft");
+		JLabel lblNewLabel_5 = new JLabel("Feedback has been submitted");
 		lblNewLabel_5.setFont(new Font("SansSerif", Font.PLAIN, 15));
 		lblNewLabel_5.setBounds(216, 113, 192, 21);
 		panel.add(lblNewLabel_5);
