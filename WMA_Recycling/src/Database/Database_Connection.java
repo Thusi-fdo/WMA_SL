@@ -1,8 +1,12 @@
 package Database;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import Code.Question;
 
 public class Database_Connection {
 
@@ -145,4 +149,35 @@ public class Database_Connection {
     	
     	
     }
+
+
+	public List<Question> GetQuestions(String sqlQuery) {
+		List<Question> quesArray = new ArrayList<Question>();
+    	try {
+            
+    		PreparedStatement psQues = conn.prepareStatement(sqlQuery);
+            ResultSet rsQues = psQues.executeQuery();
+            while(rsQues.next()){
+				// System.out.println(rs.getString("Question"));	///""+rs.getInt("QID")+"\t"+
+				//Question q = new Question(rsQues.getInt("QID"),rsQues.getString("Question"),null,null);
+				q.setQuestion();	
+				
+				String[] Options=fetchOptions(rsQues.getInt("QID"));				
+				q.setOptions(Options);
+				quesArray.add(q);
+            					 
+			  }                  
+            rsQues.close();
+            psQues.close();
+            
+            return quesArray;
+        
+        }
+    	catch (Exception e) {
+            System.out.println(e);
+            return null;
+            }
+       
+        
+	}
 }

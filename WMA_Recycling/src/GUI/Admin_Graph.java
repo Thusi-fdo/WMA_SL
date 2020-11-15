@@ -14,10 +14,9 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 
-public class Resident_Dashboard {
+public class Admin_Graph {
 
     JFrame frame;
-	private JTextField textField_2;
 
 	/**
 	 * Launch the application.
@@ -26,7 +25,7 @@ public class Resident_Dashboard {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Resident_Dashboard window = new Resident_Dashboard();
+					Admin_Graph window = new Admin_Graph();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +37,7 @@ public class Resident_Dashboard {
 	/**
 	 * Create the application.
 	 */
-	public Resident_Dashboard() {
+	public Admin_Graph() {
 		initialize();
 	}
 
@@ -57,11 +56,36 @@ public class Resident_Dashboard {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
+		JButton btnNewButton = new JButton("Search");
+		btnNewButton.setBounds(446, 284, 85, 21);
+		panel.add(btnNewButton);
+		
+		JComboBox comboBox_2 = new JComboBox();
+		comboBox_2.setBounds(343, 230, 149, 29);
+		panel.add(comboBox_2);
+		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(343, 184, 149, 23);
+		panel.add(comboBox_1);
+		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("SansSerif", Font.PLAIN, 15));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Plastic", "Toxic", "E-materials", "Cardboard", "Paper", "Metals", "Wood"}));
-		comboBox.setBounds(335, 122, 206, 23);
+		comboBox.setBounds(343, 138, 149, 23);
 		panel.add(comboBox);
+		
+		JLabel lblNewLabel_3 = new JLabel("Time Frame");
+		lblNewLabel_3.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblNewLabel_3.setBounds(184, 175, 149, 37);
+		panel.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel = new JLabel("District:");
+		lblNewLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblNewLabel.setBounds(184, 128, 149, 37);
+		panel.add(lblNewLabel);
+		
+		JLabel lblNewLabel_4 = new JLabel("Type of Waste");
+		lblNewLabel_4.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblNewLabel_4.setBounds(184, 222, 149, 37);
+		panel.add(lblNewLabel_4);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setForeground(new Color(102, 153, 102));
@@ -96,40 +120,9 @@ public class Resident_Dashboard {
 		lblNewLabel_2.setBounds(7, 304, 100, 100);
 		panel_1.add(lblNewLabel_2);
 		
-		JButton btnNewButton = new JButton("Upload");
-		btnNewButton.setBackground(new Color(51, 255, 153));
-		btnNewButton.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		btnNewButton.setBounds(301, 238, 89, 23);
-		panel.add(btnNewButton);
-		
-		JLabel lblNewLabel_3 = new JLabel("Estimated Weight(kg):");
-		lblNewLabel_3.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblNewLabel_3.setBounds(118, 169, 191, 14);
-		panel.add(lblNewLabel_3);
-		
-		JButton btnNewButton_1 = new JButton("Submit");
-		btnNewButton_1.setFont(new Font("SansSerif", Font.BOLD, 16));
-		btnNewButton_1.setBounds(445, 271, 137, 23);
-		panel.add(btnNewButton_1);
-		
-		JLabel lblNewLabel = new JLabel("Image of Waste:");
-		lblNewLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblNewLabel.setBounds(118, 240, 214, 21);
-		panel.add(lblNewLabel);
-		
-		JLabel lblNewLabel_4 = new JLabel("Type of Waste:");
-		lblNewLabel_4.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblNewLabel_4.setBounds(118, 123, 214, 14);
-		panel.add(lblNewLabel_4);
-		
-		textField_2 = new JTextField();
-		textField_2.setBounds(344, 169, 197, 20);
-		panel.add(textField_2);
-		textField_2.setColumns(10);
-		
-		JLabel lblNewLabel_6 = new JLabel("Dashboard");
+		JLabel lblNewLabel_6 = new JLabel("Graph");
 		lblNewLabel_6.setFont(new Font("SansSerif", Font.BOLD, 18));
-		lblNewLabel_6.setBounds(301, 22, 161, 23);
+		lblNewLabel_6.setBounds(353, 25, 149, 23);
 		panel.add(lblNewLabel_6);
 		
 		JLabel lblNewLabel_7 = new JLabel("");

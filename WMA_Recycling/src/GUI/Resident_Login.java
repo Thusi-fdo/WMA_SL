@@ -69,6 +69,18 @@ public class Resident_Login {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
+		JButton btnNewButton_2 = new JButton("Admin\r\n");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//call Employee login
+			}
+		});
+		btnNewButton_2.setIcon(null);
+		btnNewButton_2.setBackground(Color.WHITE);
+		btnNewButton_2.setBounds(638, 384, 85, 21);
+		panel.add(btnNewButton_2);
+		
 		JButton btnNewButton = new JButton("Register");
 		btnNewButton.setBackground(new Color(51, 255, 153));
 		btnNewButton.setFont(new Font("SansSerif", Font.PLAIN, 11));
