@@ -110,16 +110,6 @@ public class Admin_Graph {
 		btnNewButton_5.setBounds(7, 147, 89, 23);
 		panel_1.add(btnNewButton_5);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\wplogo.png"));
-		lblNewLabel_1.setBounds(7, 193, 70, 100);
-		panel_1.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\wmalogo.png"));
-		lblNewLabel_2.setBounds(7, 304, 100, 100);
-		panel_1.add(lblNewLabel_2);
-		
 		JLabel lblNewLabel_6 = new JLabel("Graph");
 		lblNewLabel_6.setFont(new Font("SansSerif", Font.BOLD, 18));
 		lblNewLabel_6.setBounds(353, 25, 149, 23);

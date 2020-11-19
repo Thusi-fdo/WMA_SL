@@ -1,6 +1,13 @@
 package Code;
 
-public class Question {
+import java.io.Serializable;
+
+public class Question implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2762714855416447173L;
+	
 	private int questionID;
 	private String Question;
 	private String[] Choices;

@@ -89,16 +89,6 @@ public class Resident_Feedback {
 		btnNewButton_5.setBounds(7, 147, 89, 23);
 		panel_1.add(btnNewButton_5);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\wplogo.png"));
-		lblNewLabel_1.setBounds(25, 193, 52, 42);
-		panel_1.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\wmalogo.png"));
-		lblNewLabel_2.setBounds(7, 273, 64, 42);
-		panel_1.add(lblNewLabel_2);
-		
 		JButton btnNewButton_6 = new JButton("Logout");
 		btnNewButton_6.setBounds(7, 381, 89, 23);
 		panel_1.add(btnNewButton_6);

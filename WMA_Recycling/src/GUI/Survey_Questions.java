@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,11 +16,16 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import Code.Question;
+import Code.QuestionInterface;
 import Database.Question_Query;
 
 import java.awt.event.ActionListener;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -31,6 +37,13 @@ public class Survey_Questions {
 	JComboBox comboOptions = new JComboBox();
 	JPanel panel = new JPanel();
 	JLabel lbl_Q1;
+	JPanel Question_Panel;
+	private QuestionInterface Qinterface;
+	int index=0;
+	
+	String[] QAnswers;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -53,10 +66,12 @@ public class Survey_Questions {
 	 */
 	public Survey_Questions() {
 		initialize();
+		
 		try
 		{
 				
-				
+				Qinterface = (QuestionInterface) Naming.lookup("rmi://localhost:1968/QuestionServer");
+				QAnswers = new String[NoOfQuestions()];
 				panel.setLayout(null);
 				//panel.remove(btnNext);
 				//frame.repaint();
@@ -179,7 +194,8 @@ public class Survey_Questions {
 		panel.add(lblNewLabel_3);
 		
 		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setEnabled(false);
+		
+		comboBox_1.setEnabled(true);
 		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Select", "Yes", "No"}));
 		comboBox_1.setFont(new Font("SansSerif", Font.BOLD, 16));
 		comboBox_1.setBounds(632, 155, 91, 24);
@@ -194,27 +210,55 @@ public class Survey_Questions {
 public void setQuestion(int count) {
 		
 			
-		Question_Query db = new Question_Query();
+		///Question_Query db = new Question_Query();
+	try {
+				
 		List<Question> quesArray = new ArrayList<Question>();
-		quesArray=db.PrepareQuestions();
+		
+		quesArray=Qinterface.PrepareQuestions();
 		
 		String s= quesArray.get(count).getQuestion();
 		lbl_Q1.setText(s);
-		try {
+		
 		String options[]=quesArray.get(count).getChoices();	
+		//Question_Panel= new JPanel();
+		//Question_Panel.setBounds(30, 100, 200, 300);
+		//Question_Panel.setLayout(null);
+		frame.repaint();
 		comboOptions.setBounds(34, 100,146, 24);		
 		comboOptions.setFont(new Font("SansSerif", Font.BOLD, 16));
 		comboOptions.setModel(new DefaultComboBoxModel(options));
+		comboOptions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String selected =  (String) comboOptions.getSelectedItem();
+               
+                QAnswers[index++]=selected;
+                System.out.println(QAnswers[index-1]);
+			}
+		});
+		
+		//Question_Panel.add(comboOptions);
 		panel.add(comboOptions);
+		comboOptions.setVisible(true);
 		}
 		
-		catch(Exception ex) {
+	catch(Exception ex) {
 			
-			System.out.println("No options");
+		System.out.println(ex);
 			
 		}
 		
 		
 		
+	}
+
+	public int NoOfQuestions() {
+		try {
+			return Qinterface.GetQuestionNo();
+		} catch (RemoteException e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return 0;
+		}		
 	}
 }

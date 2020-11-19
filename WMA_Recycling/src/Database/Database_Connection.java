@@ -16,7 +16,7 @@ public class Database_Connection {
 	private PreparedStatement ps;
 	private static Database_Connection instance;
 	private final String URL = "jdbc:mysql://localhost:3306/wma_db?user=root&password=";
-	//&useUnicode=true&characterEncoding=UTF-8
+
 	public Database_Connection() {
 		
 		try {
@@ -26,7 +26,7 @@ public class Database_Connection {
 			System.out.println("Connection Success");
 		}
 		
-	 catch (ClassNotFoundException ex) {
+		catch (ClassNotFoundException ex) {
 	        Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
 	
 	    } catch (SQLException ex) {
@@ -186,7 +186,7 @@ public class Database_Connection {
         
         }
     	catch (Exception e) {
-            System.out.println(e+"Eroor here");
+            System.out.println(e);
             return null;
             }
        
