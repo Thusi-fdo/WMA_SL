@@ -1,8 +1,11 @@
 package Code;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Resident {
 	
-	private String NIC;
+	private static String NIC;
 	private String ResidentName;
 	private String Email;
 	private String Password;
@@ -23,11 +26,11 @@ public class Resident {
 
 
 	
-	public String getNIC() {
+	public static String getNIC() {
 		return NIC;
 	}
 
-	public void setNIC(String nIC) {
+	public static void setNIC(String nIC) {
 		NIC = nIC;
 	}
 
@@ -43,10 +46,15 @@ public class Resident {
 		return Email;
 	}
 
-	public void setEmail(String email) {
-		Email = email;
+	public static boolean valEmail(String email) 
+	{
+		String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}$";
+		Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = emailPat.matcher(email);
+		return matcher.find();
 	}
 
+	//valid pass. and more
 	public String getPassword() {
 		return Password;
 	}

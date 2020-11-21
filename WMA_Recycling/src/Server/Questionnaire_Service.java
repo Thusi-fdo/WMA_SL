@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import Code.Question;
 import Code.QuestionInterface;
+import Code.Resident;
 import Database.Database_Connection;
 
 public class Questionnaire_Service extends UnicastRemoteObject implements QuestionInterface {
@@ -139,6 +140,27 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
 		}
 		
 		
+	}
+
+	@Override
+	public boolean DBAnswers(Question alist[]) throws RemoteException {
+		boolean success=false;
+		for (int i=0;i<alist.length;i++) {
+			System.out.println(Resident.getNIC());
+	         String query="INSERT INTO `answers`(NIC,Answer, QID) VALUES ('"+Resident.getNIC()+"','"+alist[i].getAnswer()+"',"+alist[i].getQID()+")";
+	         try {
+	             Statement st = conn.createStatement();
+	             int result = st.executeUpdate(query);
+	             if(result > 0) {
+	            	 
+	            	 success=true;
+	             }
+	         } catch (SQLException ex) {
+	             Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
+	             success= false;
+	         }
+	      } 
+		return success;
 	}
 
 }

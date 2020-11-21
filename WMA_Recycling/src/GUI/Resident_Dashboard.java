@@ -87,7 +87,7 @@ public class Resident_Dashboard {
 			
 				Survey_Questions qUI= new Survey_Questions(); //change Survey_Questions into other ui 
 				qUI.frame.setVisible(true);
-				frame.dispose();
+				
 				
 			}
 		});

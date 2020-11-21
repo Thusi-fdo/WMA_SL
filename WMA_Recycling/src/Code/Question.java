@@ -21,9 +21,9 @@ public class Question implements Serializable {
 	
 	
 
-	public Question(int questionID, String question) {
+	public Question(int questionID, String answer) {
 		this.questionID = questionID;
-		Question = question;
+		Answer = answer;
 	}
 
 

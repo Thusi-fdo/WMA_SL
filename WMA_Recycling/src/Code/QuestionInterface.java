@@ -10,5 +10,7 @@ public interface QuestionInterface extends Remote {
     public String[] GetOptions(int qid) throws RemoteException; 
     
     public int GetQuestionNo() throws RemoteException;
+    
+    public boolean DBAnswers(Question alist[]) throws RemoteException; 
 
 }

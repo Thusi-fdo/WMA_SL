@@ -11,6 +11,8 @@ import java.awt.Font;
 import javax.swing.JTextField;
 
 import Code.Login;
+import Code.LoginInterface;
+import Code.QuestionInterface;
 import Code.Resident;
 import Database.Login_Query;
 import java.sql.*;
@@ -22,6 +24,10 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.awt.event.ActionEvent;
 
 public class Resident_Login {
@@ -29,7 +35,8 @@ public class Resident_Login {
 	private JFrame frame;
 	private JTextField txt_NIC;
 	private JPasswordField pwd_login;
-
+	LoginInterface LI;
+	String mySessionCookie = "not set";
 	/**
 	 * Launch the application.
 	 */
@@ -50,7 +57,20 @@ public class Resident_Login {
 	 * Create the application.
 	 */
 	public Resident_Login() {
+		try {
+			LI = (LoginInterface) Naming.lookup("rmi://localhost:1968/LoginServer");
+		} catch (MalformedURLException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
 		initialize();
+		
 	}
 
 	/**
@@ -100,25 +120,39 @@ public class Resident_Login {
 				String Password = new String(pwd_login.getPassword());				
 				Login login = new Login(NIC, Password);
 					            
-	            Login_Query odb=new Login_Query();//Making Object of the class OrderDB
+	           // Login_Query odb=new Login_Query();//Making Object of the class OrderDB
 	            
-	            int logg=odb.loginMatch(login);
-	            
-	            if (logg==0){
-	            	
+	            //int logg=odb.loginMatch(login);
+				String capResults;
+				try {
+					capResults = LI.login(login);
+					 if (capResults.equals("wrong")){
+						 JOptionPane.showMessageDialog(null,"Username or Password Incorrect",
+								 "Error",JOptionPane.ERROR_MESSAGE);
+							pwd_login.setText(null);
+							txt_NIC.setText(null);
+							
+			                txt_NIC.grabFocus();
+					 } else { 
+							mySessionCookie = capResults; 
+							System.out.println("Your login was successful.");
 
-	            	Resident_Dashboard window = new Resident_Dashboard();
-					window.frame.setVisible(true);
+			            	Resident_Dashboard window = new Resident_Dashboard();
+							window.frame.setVisible(true);
+						}
+			            	
+			            	
+							
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	            
+	           
 					
 	            
 	                
-	            }else{
-	                JOptionPane.showMessageDialog(null,"Username or Password Incorrect","Login System",JOptionPane.ERROR_MESSAGE);
-	                pwd_login.setText(null);
-	                pwd_login.grabFocus();
-	                
-	            }
-	            
+	          
 			}
 		});
 		btnNewButton_1.setFont(new Font("SansSerif", Font.BOLD, 16));

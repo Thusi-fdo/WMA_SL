@@ -10,8 +10,15 @@ public class WMA_Server {
 	{
 		try {
 			Registry reg = LocateRegistry.createRegistry(1968); //Server port 1069
+			
+			
 			Questionnaire_Service QS = new Questionnaire_Service();
 			reg.rebind("QuestionServer", QS);
+			
+			LoginService LS = new LoginService();
+			reg.rebind("LoginServer", LS);
+			
+			
 			}
 		catch (RemoteException e) {
             System.out.println("A problem encountered: "+e.toString());

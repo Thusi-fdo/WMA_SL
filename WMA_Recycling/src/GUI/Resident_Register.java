@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -121,18 +122,22 @@ public class Resident_Register {
 				try
 				{
 					
-					
-					
-					
-					String NIC= txt_NIC.getText();
+					String NIC= txt_NIC.getText(); ////d[9]v regex
 					String ResName= txt_Name.getText();
 					String email= txt_Email.getText();
-					String pwd= new String (txt_pwd.getPassword());
+					String pwd= new String (txt_pwd.getPassword()); //
 					String area= (String)comboArea.getSelectedItem();
 					String subArea= (String)comboSubarea.getSelectedItem();
 					String Address= txt_address.getText();
-					
 					Resident res= new Resident(NIC, ResName, email, pwd,area, subArea, Address);
+					
+					if(!res.valEmail(email)) {
+						JOptionPane.showConfirmDialog(null, "Please insert a valid email address","Error", JOptionPane.ERROR_MESSAGE);
+					}
+					
+					
+					
+					
 					rq.CreateResident(res);
 					
 				}
@@ -215,4 +220,5 @@ public class Resident_Register {
         comboSubarea.setModel(new DefaultComboBoxModel(subareaList));
         
     }
+	/////
 }

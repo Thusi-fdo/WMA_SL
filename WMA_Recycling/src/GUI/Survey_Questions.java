@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.Color;
@@ -18,6 +19,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
 
 import Code.Question;
 import Code.QuestionInterface;
@@ -41,8 +43,10 @@ public class Survey_Questions {
 	private QuestionInterface Qinterface;
 	int index=0;
 	
-	String[] QAnswers;
 	
+	//String[] QAnswers;
+	Question QAnswers[];
+
 	
 
 	/**
@@ -69,13 +73,43 @@ public class Survey_Questions {
 		
 		try
 		{
-				
 				Qinterface = (QuestionInterface) Naming.lookup("rmi://localhost:1968/QuestionServer");
-				QAnswers = new String[NoOfQuestions()];
-				panel.setLayout(null);
+				//QAnswers = new String[NoOfQuestions()];
+				QAnswers = new Question[NoOfQuestions()]; //System.out.println(question_number);
+				//panel.setLayout();
 				//panel.remove(btnNext);
 				//frame.repaint();
-				setQuestion(question_number);				
+				
+				int qid = setQuestion(question_number);	
+				comboOptions.addActionListener(new ActionListener() {
+					int x=0;
+					public void actionPerformed(ActionEvent e) {
+					
+					if(x<1) {
+					
+					String selected =  (String) comboOptions.getSelectedItem();
+					//System.out.println(selected);
+					//comboOptions.set
+					
+	               
+					try {
+						
+							Question question_answers = new Question(qid,selected);
+							QAnswers[index]=question_answers;
+							System.out.println(index+"-"+QAnswers[index].getQID()+" "
+									+QAnswers[index].getAnswer());
+							index++;
+					}
+					catch(IndexOutOfBoundsException ei) {
+						System.out.println("End of questions");
+					}
+					catch(Exception e4) {
+						System.out.println(e4);
+					}
+					x++;
+					}
+				}
+				});
 				question_number=question_number+1;
 											
 		}		
@@ -97,7 +131,7 @@ public class Survey_Questions {
 		
 		
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(0, 0, 800, 450);
+		panel.setBounds(0, 0, 735, 417);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
@@ -106,23 +140,67 @@ public class Survey_Questions {
 			public void actionPerformed(ActionEvent e) {
 				
 
-				try
-				{		
+				if(question_number!=NoOfQuestions()) {
+					try
+					{		
+						
+						int qid = setQuestion(question_number);
+						comboOptions.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+							String selected =  (String) comboOptions.getSelectedItem();
+							
+							
+			               
+							try {
+								
+									Question question_answers = new Question(qid,selected);
+									QAnswers[index]=question_answers;
+									System.out.println(index+"-"+QAnswers[index].getQID()+" "
+											+QAnswers[index].getAnswer());
+									index++;
+							}
+							catch(IndexOutOfBoundsException ei) {
+								System.out.println("End of questions");
+							}
+							catch(Exception e4) {
+								System.out.println(e4);
+							}
+			               
+						}
+						});
+							
+						
+							
+							question_number=question_number+1;
+							
+							
+					}
 					
-						setQuestion(question_number);
-						question_number=question_number+1;
+					catch(Exception ex){
+						
+						System.out.print(ex);
+					}
 				}
-				catch(IndexOutOfBoundsException ex) {
-					int result= JOptionPane.showConfirmDialog(null, "You Have Suceesfully Completed the Survey", "Success",JOptionPane.DEFAULT_OPTION);
+				else {
+					frame.remove(comboOptions);
+					frame.remove(lbl_Q1);
+					frame.repaint();
+					try {
+						//boolean success = 
+								Qinterface.DBAnswers(QAnswers);
+						//if(success) {
+							int btnokay= JOptionPane.showConfirmDialog(panel,"Questionnaire completed","Success",JOptionPane.DEFAULT_OPTION);
+						/*	if(btnokay==0) {
+								frame.dispose();
+							}
+						}else {
+							System.out.println("UnExpected Error Occured");
+						}*/
+					} catch (Exception e1) {
+						System.out.println(e1);
+						e1.printStackTrace();
+					}
 					
-				    
-					if (result == 0) 
-						panel.remove(comboOptions);
-						frame.repaint();
-				}
-				catch(Exception ex){
-					
-					System.out.print(ex);
 				}
 				
 			}
@@ -136,19 +214,20 @@ public class Survey_Questions {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(question_number!=1) {
-				try
-				{		
+					try
+					{		
+							
+							
+							question_number=question_number-1;
+							
+							setQuestion(question_number-1);
+							
+					}				
+					catch(Exception ex){
 						
-						
-						question_number=question_number-1;
-						setQuestion(question_number-1);
-						
-				}				
-				catch(Exception ex){
+						System.out.print(ex);
+					}
 					
-					System.out.print(ex);
-				}
-				
 				}
 				
 				
@@ -207,44 +286,42 @@ public class Survey_Questions {
 		panel.add(lblNewLabel_4);
 	}
 	
-public void setQuestion(int count) {
+public int setQuestion(int count) {
 		
 			
 		///Question_Query db = new Question_Query();
 	try {
-				
+		
 		List<Question> quesArray = new ArrayList<Question>();
 		
 		quesArray=Qinterface.PrepareQuestions();
 		
 		String s= quesArray.get(count).getQuestion();
+		int qid = quesArray.get(count).getQID();
 		lbl_Q1.setText(s);
 		
 		String options[]=quesArray.get(count).getChoices();	
 		//Question_Panel= new JPanel();
 		//Question_Panel.setBounds(30, 100, 200, 300);
 		//Question_Panel.setLayout(null);
-		frame.repaint();
-		comboOptions.setBounds(34, 100,146, 24);		
+		
+		comboOptions.setBounds(34, 100,300, 24);		
 		comboOptions.setFont(new Font("SansSerif", Font.BOLD, 16));
 		comboOptions.setModel(new DefaultComboBoxModel(options));
-		comboOptions.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String selected =  (String) comboOptions.getSelectedItem();
-               
-                QAnswers[index++]=selected;
-                System.out.println(QAnswers[index-1]);
-			}
-		});
+		
+		
+		
 		
 		//Question_Panel.add(comboOptions);
 		panel.add(comboOptions);
 		comboOptions.setVisible(true);
+		return quesArray.get(count).getQID();
 		}
 		
 	catch(Exception ex) {
 			
 		System.out.println(ex);
+		return -1;
 			
 		}
 		
@@ -261,4 +338,6 @@ public void setQuestion(int count) {
 			return 0;
 		}		
 	}
+	
+	
 }

@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Code.Question;
+import Code.Resident;
 
 public class Database_Connection {
 
@@ -74,8 +75,9 @@ public class Database_Connection {
             rs = ps.executeQuery();
             // System.out.println(user+" "+pass); o print the UserName and PW in the console
             while (rs.next()){
-                if (rs.getString("NIC").equals(user) && rs.getString("Password").equals(pass)){               
-                	
+            	String nic = rs.getString("NIC");
+                if (nic.equals(user) && rs.getString("Password").equals(pass)){               
+                	Resident.setNIC(nic);	
                 	
                 log = 0;
                 break;
