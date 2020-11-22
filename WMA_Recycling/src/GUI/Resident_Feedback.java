@@ -61,11 +61,6 @@ public class Resident_Feedback {
 		lblNewLabel_5.setBounds(216, 113, 192, 21);
 		panel.add(lblNewLabel_5);
 		
-		JLabel lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\Sheena Villawarayen\\Desktop\\Dayan\\tick.png"));
-		lblNewLabel_3.setBounds(430, 70, 256, 256);
-		panel.add(lblNewLabel_3);
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setForeground(new Color(102, 153, 102));
 		panel_1.setBackground(new Color(153, 153, 153));
@@ -105,7 +100,7 @@ public class Resident_Feedback {
 		
 		JLabel lblNewLabel_6 = new JLabel("Resident_Feedback");
 		lblNewLabel_6.setFont(new Font("SansSerif", Font.BOLD, 18));
-		lblNewLabel_6.setBounds(301, 22, 161, 23);
+		lblNewLabel_6.setBounds(301, 22, 197, 23);
 		panel.add(lblNewLabel_6);
 		
 		JLabel lblNewLabel_7 = new JLabel("");
