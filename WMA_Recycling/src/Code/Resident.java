@@ -11,7 +11,7 @@ public class Resident {
 	private String Password;
 	private String City;
 	private String Subarea;
-	private String Address;
+	private String Address;  // attributes 
 	
 	public Resident(String nIC, String residentName, String email, String password, String city, String subarea,
 			String address) {

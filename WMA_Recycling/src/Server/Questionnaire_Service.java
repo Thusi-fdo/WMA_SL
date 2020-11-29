@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import Code.ChartData;
 import Code.Question;
 import Code.QuestionInterface;
 import Code.Resident;
@@ -25,10 +26,8 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
 	 */
 	private static final long serialVersionUID = 5986479382103607704L;
 	private Connection conn;
-	private Statement st;
 	private ResultSet rs;
-	private PreparedStatement ps;
-	private static Database_Connection instance;
+	private PreparedStatement ps;	
 	private final String URL = "jdbc:mysql://localhost:3306/wma_db?user=root&password=";
 
 	protected Questionnaire_Service() throws RemoteException {
@@ -48,6 +47,21 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
 	    }
 	}
 
+	public boolean QueryExecuter(String QE) {
+		try 
+		 {
+	            Statement st = conn.createStatement();
+	            int result = st.executeUpdate(QE);
+	            return (result > 0);
+	            
+	        } catch (SQLException ex) {
+	            System.out.println(ex);
+	            return false;
+	     }
+		
+	}
+	
+	
 	@Override
 	public List<Question> PrepareQuestions() throws RemoteException {
 		String Query="SELECT QID,Question,q_type FROM survey_question";
@@ -162,5 +176,52 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
 	      } 
 		return success;
 	}
+
+	@Override
+	public boolean AddingQuestion(String NewQuestion) throws RemoteException {
+		String sql_query = "INSERT INTO `survey_question`(`Question`, `q_type`) VALUES ('"+NewQuestion+"','JComboBox')";
+		 return QueryExecuter(sql_query);		
+	}
+
+	@Override
+	public boolean AddingChoices(String Description, int QID) throws RemoteException {
+		String sql_query="INSERT INTO `options`(`Description`, `QID`) VALUES ('"+Description+"',"+QID+")";		
+		return QueryExecuter(sql_query);
+	}
+
+	@Override
+	public boolean DeletingChoices(String choice,int QID) throws RemoteException {
+		String sql_query="DELETE FROM `options` WHERE Description='"+choice+"' AND `QID`="+QID;
+		return QueryExecuter(sql_query);
+	}
+
+	@Override
+	public List<ChartData> getChartData(int qid) throws RemoteException {
+		List <ChartData> chartData = new ArrayList();
+		String sql_query="SELECT *,count(Answer) FROM answers WHERE QID ="+qid+" GROUP BY `Answer`";
+		int count =0;
+		String Choice;
+		try {
+		
+    		ps = conn.prepareStatement(sql_query);
+            rs = ps.executeQuery();
+            while(rs.next()){
+				Choice=rs.getString("Answer");
+				System.out.println(Choice);
+				count= rs.getInt("count(Answer)");	
+				chartData.add(new ChartData(Choice,count));			 
+			  }                  
+           
+           
+            return chartData;
+        
+        }
+    	catch (Exception e) {
+            System.out.println(e+"Error");
+            e.printStackTrace();
+            return null;
+            }
+	}
+	
 
 }

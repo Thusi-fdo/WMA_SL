@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,24 +25,38 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.Document;
 
 import Code.Question;
 import Code.QuestionInterface;
 
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Color;
+
 
 
 public class Admin_QEdit {
 
-	//private JFrame frame;
-	private JComponent ui = null;
+	
+	
     JTextField filterText;
     TableRowSorter sorter;
+    TableRowSorter sorter2;
     QuestionInterface Qinterface;
     JPanel panel = new JPanel();
     JFrame f;
-   
+    JPanel gui;
+    JTable table;
+    JTable table2;
+    JPanel ui;
+    List<Question> qArray;
+    
 
 	/**
 	 * Launch the application.
@@ -99,7 +114,7 @@ public class Admin_QEdit {
         //Admin_QEdit o2 = new Admin_QEdit(false);
 
         f = new JFrame("Question Editor");
-        f.setBounds(100,100,850,450);
+        f.setBounds(100,100,850,550);
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        // f.setLocationByPlatform(true);
 
@@ -118,72 +133,133 @@ public class Admin_QEdit {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(boolean listLike) {
-		//frame = new JFrame();
-		//frame.setBounds(100, 100, 450, 300);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
-
-        JPanel gui = new JPanel(new BorderLayout(4, 4));
-        gui.setBorder(new EmptyBorder(4, 4, 4, 4));
-
-      /*  GraphicsEnvironment ge
-                = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        String[] fonts = ge.getAvailableFontFamilyNames();*/
-        
-        try {
-			List<Question> qArray=Qinterface.PrepareQuestions();
-			String[][] tableData = new String[qArray.size()][1];
-	        for (int i = 0; i < qArray.size(); i++) {
-	            tableData[i][0] = qArray.get(i).getQuestion();
+		try {
+			displayQuestion();
+	        f.getContentPane().add(gui, BorderLayout.LINE_START);
+	        {
+	        	JPanel panel_Button = new JPanel();
+	        	f.getContentPane().add(panel_Button, BorderLayout.SOUTH);
+	        	{
+	        		JButton btnAdd = new JButton("Add");
+	        		btnAdd.addActionListener(new ActionListener() {
+	        			public void actionPerformed(ActionEvent e) {
+	        				String AddQuestion = JOptionPane.showInputDialog(f,"Add Question");
+	        				if(AddQuestion!=null) {
+	        					try {
+									Qinterface.AddingQuestion(AddQuestion);
+									displayQuestion();
+							
+									f.remove(gui);
+									f.getContentPane().add(gui, BorderLayout.LINE_START);
+									f.revalidate();
+								} catch (RemoteException e1) {
+									System.out.println(e1);
+									e1.printStackTrace();
+								}
+	        				}
+	        				
+	        			}
+	        		});
+	        		btnAdd.setBackground(new Color(0, 128, 0));
+	        		panel_Button.add(btnAdd);
+	        	}
+	        	{
+	        		JButton BtnDel = new JButton("Delete");
+	        		BtnDel.setBackground(new Color(0, 128, 0));
+	        		panel_Button.add(BtnDel);
+	        	}
+	        	
+	        	panel_Button.add(Box.createRigidArea(new Dimension(200, 50)));
+	        	
+	        	{
+	        		JButton BtnAddAns = new JButton("Add");
+	        		BtnAddAns.addActionListener(new ActionListener() {
+	        			public void actionPerformed(ActionEvent e) {
+	        				
+	        				f.revalidate();
+	        				if(table.getSelectedRow()>=0) {
+		        				String AddAnswer = JOptionPane.showInputDialog(f,"Add Answer Choices");
+		        				
+		        				if(AddAnswer!=null) {
+		        					try {
+										
+		        						Qinterface.AddingChoices(AddAnswer, qArray.get(table.getSelectedRow()).getQID());
+		        						
+		        						int tbl_row=table.getSelectedRow();
+										
+		        						
+										
+										displayQuestion();
+										
+																		
+										displayAnswers(qArray.get(tbl_row).getChoices());
+										
+										f.getContentPane().add(gui, BorderLayout.LINE_START);
+										//table.addRowSelectionInterval(tbl_row, tbl_row);
+										f.revalidate();
+									
+										
+										
+									} catch (RemoteException e1) {
+										System.out.println(e1);
+										e1.printStackTrace();
+									}
+		        				}
+	        				}
+	        			}
+	        		});
+	        		BtnAddAns.setBackground(new Color(0, 128, 0));
+	        		panel_Button.add(BtnAddAns);
+	        	}
+	        	{
+	        		JButton BtnDelAns = new JButton("Delete");
+	        		
+	        		BtnDelAns.addActionListener(new ActionListener() {
+	        			public void actionPerformed(ActionEvent e) {
+	        			
+	        				//System.out.println(table.getSelectedRow());
+	        				f.revalidate();
+	        				if(table2.getSelectedRow()!=-1) {
+	        				try {
+	        					
+	        					int result = JOptionPane.showConfirmDialog(f, "Are you sure you want to delete this option?");
+								if(result==0)
+								{
+									
+										int tbl_row =table.getSelectedRow();
+										
+										String option=(String)table2.getValueAt(table2.getSelectedRow(), table2.getSelectedColumn());
+										int qid =qArray.get(table.getSelectedRow()).getQID();
+										
+										Qinterface.DeletingChoices(option,qid);
+										
+										
+										displayQuestion();					
+										displayAnswers(qArray.get(tbl_row).getChoices());										
+										//table.addRowSelectionInterval(tbl_row, tbl_row);
+										table2.clearSelection();
+										table.clearSelection();
+										f.revalidate();
+										
+										
+								}
+							} catch (RemoteException e1) {
+								System.out.println(e1);
+								e1.printStackTrace();
+							}
+	        				}
+	        				
+	        				
+	        			}
+	        			
+	        		});
+	        		BtnDelAns.setBackground(Color.GREEN);
+	        		panel_Button.add(BtnDelAns);
+	        	}
 	        }
-	        String[] header = {"Questions"};
-	        JTable table = new JTable(tableData, header);
-	        if (listLike) {
-	            Dimension d = table.getPreferredScrollableViewportSize();
-	            table.setPreferredScrollableViewportSize(new Dimension(d.width/2,d.height));
-	            table.setShowGrid(false);
-	            table.setTableHeader(null);
-	            table.setFillsViewportHeight(true);
-	        }
-	        gui.add(new JScrollPane(table));
-	        sorter = new TableRowSorter(table.getModel());
-	        table.setRowSorter(sorter);
-
-	        filterText = new JTextField(10);
-	        gui.add(filterText, BorderLayout.PAGE_START);
-	        Document doc = filterText.getDocument();
-	        DocumentListener listener = new DocumentListener() {
-
-	            @Override
-	            public void insertUpdate(DocumentEvent e) {
-	                newFilter();
-	            }
-
-	            @Override
-	            public void removeUpdate(DocumentEvent e) {
-	                newFilter();
-	            }
-
-	            @Override
-	            public void changedUpdate(DocumentEvent e) {
-	                newFilter();
-	            }
-	        };
-	        doc.addDocumentListener(listener);
-	        f.getContentPane().add(gui, BorderLayout.LINE_START); //left column
-	        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	            public void valueChanged(ListSelectionEvent event) {
-	            	if (ui != null) {
-	            	f.remove(ui);
-	            	}
-	            	String choices[] = qArray.get(table.getSelectedRow()).getChoices();
-	            	displayAnswers(choices);
-	                f.repaint();
-	                f.revalidate();
-	                System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
-	            }
-	        });
+	        
 		} catch (Exception e1) {
 			System.out.println(e1);
 			e1.printStackTrace();
@@ -214,13 +290,76 @@ public class Admin_QEdit {
 	        return ui;
 	    }
 	    
-	
+	public void displayQuestion() {
+
+		
+		gui = new JPanel(new BorderLayout(4, 4));
+        gui.setBorder(new EmptyBorder(4, 4, 4, 4));
+
+      /*  GraphicsEnvironment ge
+                = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        String[] fonts = ge.getAvailableFontFamilyNames();*/
+        
+        try {
+			qArray=Qinterface.PrepareQuestions();
+			String[][] tableData = new String[qArray.size()][1];
+	        for (int i = 0; i < qArray.size(); i++) {
+	            tableData[i][0] = qArray.get(i).getQuestion();
+	        }
+	        String[] header = {"Questions"};
+	        table = new JTable(tableData, header);
+	        table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+	        gui.add(new JScrollPane(table));
+	        sorter = new TableRowSorter(table.getModel());
+	        table.setRowSorter(sorter);
+
+	        filterText = new JTextField(10);
+	        gui.add(filterText, BorderLayout.PAGE_START);
+	        Document doc = filterText.getDocument();
+	        DocumentListener listener = new DocumentListener() {
+
+	            @Override
+	            public void insertUpdate(DocumentEvent e) {
+	                newFilter();
+	            }
+
+	            @Override
+	            public void removeUpdate(DocumentEvent e) {
+	                newFilter();
+	            }
+
+	            @Override
+	            public void changedUpdate(DocumentEvent e) {
+	                newFilter();
+	            }
+	        };
+	        doc.addDocumentListener(listener);
+	        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	            public void valueChanged(ListSelectionEvent event) {
+	            	if(table.getSelectedRow()<0) 
+	                {
+	            		table.addRowSelectionInterval(0, 0);
+	                }
+		            	if (ui != null) {
+		            	f.remove(ui);
+		            	}
+		            	String choices[] = qArray.get(table.getSelectedRow()).getChoices();
+		            	displayAnswers(choices);
+		                f.repaint();
+		                f.revalidate();
+		                System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
+	                
+	            }
+	        });
+        }
+        catch(Exception e) {
+        	System.out.println(e);
+        }
+	}
 	 
 	public void displayAnswers(String choices[]) {
 		
-		//if (ui != null) {
-          //  return;
-        //}
+		
 
         ui = new JPanel(new BorderLayout(4, 4));
         ui.setBorder(new EmptyBorder(4, 4, 4, 4));
@@ -236,17 +375,17 @@ public class Admin_QEdit {
 	            tableData[i][0] = choices[i];
 	        }
 	        String[] header = {"Fonts"};
-	        JTable table = new JTable(tableData, header);
+	        table2 = new JTable(tableData, header);
 	        
-            Dimension d = table.getPreferredScrollableViewportSize();
-            table.setPreferredScrollableViewportSize(new Dimension(d.width/2,d.height));
-            table.setShowGrid(false);
-            table.setTableHeader(null);
-            table.setFillsViewportHeight(true);
+            Dimension d = table2.getPreferredScrollableViewportSize();
+            table2.setPreferredScrollableViewportSize(new Dimension(d.width/2,d.height));
+            table2.setShowGrid(false);
+            table2.setTableHeader(null);
+            table2.setFillsViewportHeight(true);
 	        
-	        ui.add(new JScrollPane(table));
-	        sorter = new TableRowSorter(table.getModel());
-	        table.setRowSorter(sorter);
+	        ui.add(new JScrollPane(table2));
+	        sorter2 = new TableRowSorter(table2.getModel());
+	        table2.setRowSorter(sorter2);
 
 	        filterText = new JTextField(10);
 	        ui.add(filterText, BorderLayout.PAGE_START);

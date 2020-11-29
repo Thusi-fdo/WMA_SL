@@ -69,7 +69,7 @@ public class LoginService extends UnicastRemoteObject implements LoginInterface{
 	@Override
 	public String logout(String cookie) throws RemoteException {
 		sessionCookie = "abc"+Math.random(); 
-		return "logout successful";
+		return "logout successful";    //things resident can do
 	}
 
 
