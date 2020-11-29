@@ -93,11 +93,12 @@ public class Survey_Questions {
 					
 	               
 					try {
-						
-							Question question_answers = new Question(qid,selected);
+							int optionId= Qinterface.GetOptionID(selected);
+							Question question_answers = new Question(qid,selected,optionId);
 							QAnswers[index]=question_answers;
-							System.out.println(index+"-"+QAnswers[index].getQID()+" "
-									+QAnswers[index].getAnswer());
+							/*System.out.println(index+"-"+QAnswers[index].getQID()+" "
+									+QAnswers[index].getAnswer());*/
+							System.out.println(QAnswers[index].getOptionID());
 							index++;
 					}
 					catch(IndexOutOfBoundsException ei) {
@@ -138,70 +139,64 @@ public class Survey_Questions {
 		JButton btnNext = new JButton("Next");
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-
 				if(question_number!=NoOfQuestions()) {
 					try
-					{		
-						
+					{	
 						int qid = setQuestion(question_number);
 						comboOptions.addActionListener(new ActionListener() {
+							int x=0;
 							public void actionPerformed(ActionEvent e) {
-							String selected =  (String) comboOptions.getSelectedItem();
-							
-							
-			               
-							try {
+								if(x<1) {
+									
+									String selected =  (String) comboOptions.getSelectedItem();
+									try {
+											int optionId= Qinterface.GetOptionID(selected);
+											Question question_answers = new Question(qid,selected,optionId);
+											QAnswers[index]=question_answers;
+											/*System.out.println(index+"-"+QAnswers[index].getQID()+" "
+													+QAnswers[index].getAnswer());*/
+											System.out.println(QAnswers[index].getOptionID());
+											index++;
+									}
+									catch(IndexOutOfBoundsException ei) {
+										System.out.println("End of questions");
+									}
+									catch(Exception e4) {
+										System.out.println(e4);
+									}
+									x++;
+								}
 								
-									Question question_answers = new Question(qid,selected);
-									QAnswers[index]=question_answers;
-									System.out.println(index+"-"+QAnswers[index].getQID()+" "
-											+QAnswers[index].getAnswer());
-									index++;
+							
 							}
-							catch(IndexOutOfBoundsException ei) {
-								System.out.println("End of questions");
-							}
-							catch(Exception e4) {
-								System.out.println(e4);
-							}
-			               
-						}
 						});
-							
-						
-							
-							question_number=question_number+1;
-							
-							
+			
+						question_number=question_number+1;
 					}
-					
 					catch(Exception ex){
-						
 						System.out.print(ex);
 					}
-				}
-				else {
-					frame.remove(comboOptions);
-					frame.remove(lbl_Q1);
-					frame.repaint();
-					try {
-						//boolean success = 
-								Qinterface.DBAnswers(QAnswers);
-						//if(success) {
-							int btnokay= JOptionPane.showConfirmDialog(panel,"Questionnaire completed","Success",JOptionPane.DEFAULT_OPTION);
-						/*	if(btnokay==0) {
-								frame.dispose();
-							}
-						}else {
-							System.out.println("UnExpected Error Occured");
-						}*/
-					} catch (Exception e1) {
-						System.out.println(e1);
-						e1.printStackTrace();
 					}
+				
+				else {
+						frame.remove(comboOptions);
+						frame.remove(lbl_Q1);
+						frame.repaint();
+						try {
+								Qinterface.DBAnswers(QAnswers);
+							
+							for(int i=0;i<QAnswers.length;i++) {
+								System.out.println(QAnswers[i].getAnswer());
+							}
+								int btnokay= JOptionPane.showConfirmDialog(panel,"Questionnaire completed","Success",JOptionPane.DEFAULT_OPTION);
+							
+						} catch (Exception e1) {
+							System.out.println(e1);
+							e1.printStackTrace();
+						}
 					
-				}
+					}
+				
 				
 			}
 		});
@@ -237,25 +232,6 @@ public class Survey_Questions {
 		btnBack.setBounds(496, 311, 85, 21);
 		panel.add(btnBack);
 		
-		JLabel lblNewLabel_5 = new JLabel("How does your household divert or disposes hazardous waste and electronic waste?");
-		lblNewLabel_5.setEnabled(false);
-		lblNewLabel_5.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblNewLabel_5.setBounds(37, 251, 686, 24);
-		panel.add(lblNewLabel_5);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setEnabled(false);
-		comboBox.setFont(new Font("SansSerif", Font.BOLD, 16));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"In the public bin", "By the valley/river/lakeside", "In an itinerant waste van", "By the road or side street", "On an open space", "In a hole in own compartment"}));
-		comboBox.setBounds(461, 210, 230, 24);
-		panel.add(comboBox);
-		
-		JLabel lblNewLabel_1 = new JLabel("How do you dispose the collected household waste?");
-		lblNewLabel_1.setEnabled(false);
-		lblNewLabel_1.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(37, 207, 415, 21);
-		panel.add(lblNewLabel_1);
-		
 		JLabel lblNewLabel = new JLabel("Questions");
 		lblNewLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
 		lblNewLabel.setBounds(319, 0, 150, 31);
@@ -265,20 +241,6 @@ public class Survey_Questions {
 		lbl_Q1.setFont(new Font("SansSerif", Font.BOLD, 16));
 		lbl_Q1.setBounds(37, 54, 532, 24);
 		panel.add(lbl_Q1);
-		
-		JLabel lblNewLabel_3 = new JLabel("Have you ever been educated on proper waste management by the council?");
-		lblNewLabel_3.setEnabled(false);
-		lblNewLabel_3.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblNewLabel_3.setBounds(37, 157, 585, 21);
-		panel.add(lblNewLabel_3);
-		
-		JComboBox comboBox_1 = new JComboBox();
-		
-		comboBox_1.setEnabled(true);
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Select", "Yes", "No"}));
-		comboBox_1.setFont(new Font("SansSerif", Font.BOLD, 16));
-		comboBox_1.setBounds(632, 155, 91, 24);
-		panel.add(comboBox_1);
 		
 		JLabel lblNewLabel_4 = new JLabel("");
 		lblNewLabel_4.setIcon(new ImageIcon("C:\\Users\\asus\\Downloads\\bgnew.jpg"));

@@ -13,6 +13,8 @@ public interface QuestionInterface extends Remote {
     
     public boolean DBAnswers(Question alist[]) throws RemoteException; 
     
+    public int GetOptionID(String Option) throws RemoteException;
+    
     public boolean AddingQuestion(String NewQuestion) throws RemoteException;
     
     public boolean AddingChoices(String Description, int QID) throws RemoteException;

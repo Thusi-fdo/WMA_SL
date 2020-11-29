@@ -18,7 +18,8 @@ public class WMA_Server {
 			LoginService LS = new LoginService();
 			reg.rebind("LoginServer", LS);
 			
-			
+			ResidentService RS = new ResidentService();
+			reg.rebind("ResServer", RS);
 			}
 		catch (RemoteException e) {
             System.out.println("A problem encountered: "+e.toString());

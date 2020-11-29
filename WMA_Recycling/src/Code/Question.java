@@ -12,6 +12,7 @@ public class Question implements Serializable {
 	private String Question;
 	private String[] Choices;
 	private String Answer;
+	private int optionID;
 	
 	public Question(int qid, String question, String[] choices) {
 		questionID = qid; 
@@ -21,9 +22,10 @@ public class Question implements Serializable {
 	
 	
 
-	public Question(int questionID, String answer) {
+	public Question(int questionID, String answer,int optionID) {
 		this.questionID = questionID;
 		Answer = answer;
+		this.optionID=optionID;
 	}
 
 
@@ -59,4 +61,18 @@ public class Question implements Serializable {
 	public void setAnswer(String answer) {
 		Answer = answer;
 	}
+
+
+
+	public int getOptionID() {
+		return optionID;
+	}
+
+
+
+	public void setOptionID(int optionID) {
+		this.optionID = optionID;
+	}
+	
+	
 }

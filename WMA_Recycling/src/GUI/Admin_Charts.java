@@ -99,9 +99,11 @@ public class Admin_Charts {
 		frame.getContentPane().setLayout(null);
 		
 		
-		panel = new JPanel(new FlowLayout());
-		panel.setBounds(0, 0, 850, 550);
+		panel = new JPanel();
+		panel.setBounds(0, 0, 350, 550);
 		frame.getContentPane().add(panel);
+		list.setBounds(1, 1, 318, 508);
+		//list.setBounds(-226, 6, 300, 360);
 		
 		list.setBorder(null);
 		list.setVisibleRowCount(9);
@@ -178,13 +180,24 @@ public class Admin_Charts {
 	                }
 	            }
 	        });
+		  panel.setLayout(null);
 		
 		  
 		  panel.add(list);
-		  panel.add(new JScrollPane(list));
+		  JScrollPane scrollPane = new JScrollPane(list);
+		  scrollPane.setBounds(0, 0, 320, 511);
+		  panel.add(scrollPane);
 		  
-		  lblChart = new JLabel();		
-			panel.add(lblChart);
+		  
+		  
+		  JPanel panelChart = new JPanel();
+		  panelChart.setBounds(350, 0, 535, 510);
+		  frame.getContentPane().add(panelChart);
+		  panelChart.setLayout(new FlowLayout());
+		  
+		  lblChart = new JLabel("\r\n");		
+		  lblChart.setBounds(0, 0, 535, 510);
+		  panelChart.add(lblChart);
 	
 	}
 
@@ -242,12 +255,11 @@ public class Admin_Charts {
 			Image img = ImageIO.read(chartimg);//.getScaledInstance(700, 300,  java.awt.Image.SCALE_SMOOTH);
 			
 			ImageIcon newIcon = new ImageIcon(img);
-			lblChart = new JLabel();
-			lblChart.setBounds(0,0,736,413);
+			
+			
 			lblChart.setIcon(newIcon);
 			
-			panel.add(lblChart);
-		} catch (Exception e) {
+					} catch (Exception e) {
 			System.out.print(e);
 			e.printStackTrace();
 		}

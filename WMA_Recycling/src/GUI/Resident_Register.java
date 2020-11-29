@@ -9,7 +9,9 @@ import javax.swing.JPanel;
 import java.awt.Font;
 import javax.swing.JTextField;
 
+import Code.QuestionInterface;
 import Code.Resident;
+import Code.ResidentInterface;
 import Database.Register_Query;
 
 import java.sql.*;
@@ -21,6 +23,10 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.DriverManager;
 import java.awt.event.ActionEvent;
 
@@ -31,7 +37,6 @@ public class Resident_Register {
 	private JTextField txt_Email;
 	private JTextField txt_NIC;
 	private JTextField txt_address;
-	private JPasswordField txt_pwd;
 	private JPasswordField txt_pwdCon;
 	private JPasswordField passwordField;
 	private JComboBox comboSubarea;
@@ -39,6 +44,7 @@ public class Resident_Register {
 	String areaList[];
 	String subareaList[];
 	Register_Query rq = new Register_Query();
+	ResidentInterface RI;
 
 	/**
 	 * Launch the application.
@@ -60,6 +66,14 @@ public class Resident_Register {
 	 * Create the application.
 	 */
 	public Resident_Register() {
+		
+		try {
+			RI = (ResidentInterface) Naming.lookup("rmi://localhost:1968/ResServer");
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+		
 		initialize();
 	}
 
@@ -77,6 +91,49 @@ public class Resident_Register {
 		panel.setBounds(0, 0, 733, 415);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
+		
+		JButton btnNewButton_1 = new JButton("Register");
+		btnNewButton_1.setFont(new Font("SansSerif", Font.BOLD, 16));
+		btnNewButton_1.setBounds(517, 290, 171, 23);
+		panel.add(btnNewButton_1);
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try
+				{
+					
+					String NIC= txt_NIC.getText(); ////d[9]v regex
+					String ResName= txt_Name.getText();
+					String email= txt_Email.getText();
+					String pwd= new String (passwordField.getPassword()); //min 8 charaters
+					String area= (String)comboArea.getSelectedItem();
+					String subArea= (String)comboSubarea.getSelectedItem();
+					String Address= txt_address.getText();
+					
+					
+					if(!Resident.valEmail(email)) {
+						JOptionPane.showMessageDialog(null, "Please insert a valid email address","Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else if(!Resident.ValidateNIC(NIC)){
+						JOptionPane.showMessageDialog(null, "Please insert a valid NIC number","Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else if(!Resident.ValidatePW(pwd)) {
+						JOptionPane.showMessageDialog(null, "Password should contain atleast 8 characters, 1 lower case, 1 upper case, 1 special charater and no white-spaces","Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+					Resident.setNIC(NIC);
+					Resident res= new Resident(ResName, email, pwd,area, subArea, Address);
+					System.out.println(Resident.getNIC());
+					
+					RI.CreateResident(res);
+					}
+				}
+				catch(Exception ex)
+				{
+					System.out.println(ex.getMessage());
+				}
+			}
+		});
 		
 		comboSubarea = new JComboBox();
 		comboSubarea.setBounds(497, 99, 191, 23);
@@ -115,41 +172,8 @@ public class Resident_Register {
 		lblNewLabel_3.setBounds(23, 142, 125, 14);
 		panel.add(lblNewLabel_3);
 		
-		JButton btnNewButton_1 = new JButton("Register");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				try
-				{
-					
-					String NIC= txt_NIC.getText(); ////d[9]v regex
-					String ResName= txt_Name.getText();
-					String email= txt_Email.getText();
-					String pwd= new String (txt_pwd.getPassword()); //
-					String area= (String)comboArea.getSelectedItem();
-					String subArea= (String)comboSubarea.getSelectedItem();
-					String Address= txt_address.getText();
-					Resident res= new Resident(NIC, ResName, email, pwd,area, subArea, Address);
-					
-					if(!res.valEmail(email)) {
-						JOptionPane.showConfirmDialog(null, "Please insert a valid email address","Error", JOptionPane.ERROR_MESSAGE);
-					}
-					
-					
-					
-					
-					rq.CreateResident(res);
-					
-				}
-				catch(Exception ex)
-				{
-					System.out.println(ex.getMessage());
-				}
-			}
-		});
-		btnNewButton_1.setFont(new Font("SansSerif", Font.BOLD, 16));
-		btnNewButton_1.setBounds(517, 290, 171, 23);
-		panel.add(btnNewButton_1);
+		
+		
 		
 		JLabel lblNewLabel = new JLabel("Password:");
 		lblNewLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
@@ -186,10 +210,6 @@ public class Resident_Register {
 		panel.add(txt_address);
 		txt_address.setColumns(10);
 		
-		txt_pwd = new JPasswordField();
-		txt_pwd.setBounds(344, 213, 191, 21);
-		panel.add(txt_pwd);
-		
 		JLabel lblNewLabel_6 = new JLabel("Register");
 		lblNewLabel_6.setFont(new Font("SansSerif", Font.BOLD, 18));
 		lblNewLabel_6.setBounds(297, 0, 436, 23);
@@ -207,8 +227,14 @@ public class Resident_Register {
 	public void getAreaData() {
 	
 				
-		areaList = rq.getAreaList();		
-		comboArea.setModel(new DefaultComboBoxModel(areaList));
+		try {
+			areaList = RI.getAreaList();
+			comboArea.setModel(new DefaultComboBoxModel(areaList));
+		} catch (RemoteException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}		
+		
 		
 	}
 	
@@ -216,8 +242,14 @@ public class Resident_Register {
         //serviceprice.setText(serviceitem.getSelectedItem().toString());
 
         int subarea_index=comboArea.getSelectedIndex();
-        subareaList=rq.getSubAreaList(subarea_index);
-        comboSubarea.setModel(new DefaultComboBoxModel(subareaList));
+        try {
+			subareaList=RI.getSubAreaList(subarea_index);
+			comboSubarea.setModel(new DefaultComboBoxModel(subareaList));
+		} catch (RemoteException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+        
         
     }
 	/////

@@ -175,7 +175,7 @@ public class Database_Connection {
             	}
             	else {
             		
-            		q = new Question(rsQues.getInt("QID"),rsQues.getString("Question"));
+            		q = null;
             	}
             	
             	questionList.add(q);

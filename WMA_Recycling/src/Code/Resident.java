@@ -1,10 +1,15 @@
 package Code;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Resident {
+public class Resident implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5655719722214019601L;
 	private static String NIC;
 	private String ResidentName;
 	private String Email;
@@ -13,9 +18,9 @@ public class Resident {
 	private String Subarea;
 	private String Address;  // attributes 
 	
-	public Resident(String nIC, String residentName, String email, String password, String city, String subarea,
+	public Resident( String residentName, String email, String password, String city, String subarea,
 			String address) {
-		NIC = nIC;
+		
 		ResidentName = residentName;
 		Email = email;
 		Password = password;
@@ -48,11 +53,27 @@ public class Resident {
 
 	public static boolean valEmail(String email) 
 	{
-		String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}$";
-		Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-		Matcher matcher = emailPat.matcher(email);
-		return matcher.find();
+		Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+		 
+         Matcher matcher = pattern.matcher(email);
+         return matcher.find();
 	}
+	public static boolean ValidateNIC(String nic) {
+		//String NICRegex ="^(?=.*[0-9]){12}$" ; //| "^[0-9]{9}[vVxX]$"
+		//.trim().matches("^[0-9]{9}[vVxX]$")
+		
+		return nic.trim().matches("^[0-9]{9}[vVxX]|[0-9]{12}$");
+	}
+	public static boolean ValidatePW(String pw) {
+		String PWRegex = "^(?=.*[0-9])"
+						+ "(?=.*[a-z])(?=.*[A-Z])"
+						+ "(?=.*[@#$%^&+=])"
+						+ "(?=\\S+$).{8,20}$";  
+		
+		return pw.trim().matches(PWRegex);
+	}
+	
 
 	//valid pass. and more
 	public String getPassword() {

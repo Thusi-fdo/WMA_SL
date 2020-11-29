@@ -84,7 +84,8 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
             	}
             	else {
             		
-            		q = new Question(rsQues.getInt("QID"),rsQues.getString("Question"));
+            		//q = new Question(rsQues.getInt("QID"),rsQues.getString("Question"));
+            		q=null;
             	}
             	
             	questionList.add(q);
@@ -139,6 +140,21 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
     	}
 	}
 	
+	@Override
+	public int GetOptionID(String Option) throws RemoteException {
+		try {
+			ps = conn.prepareStatement("SELECT * FROM `options` WHERE `Description`='"+Option+"'");
+			rs = ps.executeQuery();
+			rs.next();
+			int optionID = rs.getInt("OptionID");
+			return optionID;
+		}
+		catch (SQLException e){
+			System.out.println(e);
+			return -1;
+		}
+	}
+	
 	public int GetQuestionNo()throws RemoteException{
 		try {
 			
@@ -160,8 +176,8 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
 	public boolean DBAnswers(Question alist[]) throws RemoteException {
 		boolean success=false;
 		for (int i=0;i<alist.length;i++) {
-			System.out.println(Resident.getNIC());
-	         String query="INSERT INTO `answers`(NIC,Answer, QID) VALUES ('"+Resident.getNIC()+"','"+alist[i].getAnswer()+"',"+alist[i].getQID()+")";
+			//System.out.println(Resident.getNIC());
+	         String query="INSERT INTO `answers`(NIC,Answer,QID,OptionID) VALUES ('"+Resident.getNIC()+"','"+alist[i].getAnswer()+"',"+alist[i].getQID()+","+alist[i].getOptionID()+")";
 	         try {
 	             Statement st = conn.createStatement();
 	             int result = st.executeUpdate(query);
@@ -222,6 +238,8 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
             return null;
             }
 	}
+
+	
 	
 
 }
