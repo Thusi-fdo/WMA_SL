@@ -89,31 +89,43 @@ public class Resident_Login {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		JButton btnNewButton_2 = new JButton("Admin\r\n");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton btnAdmin = new JButton("Admin\r\n");
+		btnAdmin.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnAdmin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Admin_Login window = new Admin_Login();
+				window.frame.setVisible(true);
+				frame.dispose();
 				//call Employee login
 			}
 		});
-		btnNewButton_2.setIcon(null);
-		btnNewButton_2.setBackground(Color.WHITE);
-		btnNewButton_2.setBounds(638, 384, 85, 21);
-		panel.add(btnNewButton_2);
+		btnAdmin.setIcon(null);
+		btnAdmin.setBackground(Color.WHITE);
+		btnAdmin.setBounds(638, 384, 85, 21);
+		panel.add(btnAdmin);
 		
-		JButton btnNewButton = new JButton("Register");
-		btnNewButton.setBackground(new Color(51, 255, 153));
-		btnNewButton.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		btnNewButton.setBounds(219, 274, 89, 23);
-		panel.add(btnNewButton);
+		JButton BtnRegister = new JButton("Register");
+		BtnRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Resident_Register window = new Resident_Register();
+				window.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		BtnRegister.setBackground(new Color(122, 175, 23));
+		BtnRegister.setFont(new Font("Calibri", Font.BOLD, 16));
+		BtnRegister.setBounds(219, 270, 150, 30);
+		panel.add(BtnRegister);
 		
 		JLabel lblNewLabel_3 = new JLabel("NIC:");
 		lblNewLabel_3.setFont(new Font("SansSerif", Font.BOLD, 16));
 		lblNewLabel_3.setBounds(119, 134, 125, 14);
 		panel.add(lblNewLabel_3);
 		
-		JButton btnNewButton_1 = new JButton("Login");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnLogin = new JButton("Login");
+		btnLogin.setBackground(new Color(122, 175, 23));
+		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				String NIC = txt_NIC.getText();
@@ -139,6 +151,7 @@ public class Resident_Login {
 
 			            	Resident_Dashboard window = new Resident_Dashboard();
 							window.frame.setVisible(true);
+							frame.dispose();
 						}
 			            	
 			            	
@@ -155,9 +168,9 @@ public class Resident_Login {
 	          
 			}
 		});
-		btnNewButton_1.setFont(new Font("SansSerif", Font.BOLD, 16));
-		btnNewButton_1.setBounds(445, 271, 137, 23);
-		panel.add(btnNewButton_1);
+		btnLogin.setFont(new Font("Calibri", Font.BOLD, 16));
+		btnLogin.setBounds(445, 270, 150, 30);
+		panel.add(btnLogin);
 		
 		JLabel lblNewLabel = new JLabel("Password:");
 		lblNewLabel.setFont(new Font("SansSerif", Font.BOLD, 16));

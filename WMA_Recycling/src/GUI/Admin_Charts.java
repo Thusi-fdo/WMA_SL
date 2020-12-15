@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -31,16 +32,22 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONStreamAware;
 
 import Code.ChartData;
 import Code.Question;
 import Code.QuestionInterface;
 import Server.Questionnaire_Service;
+import javax.swing.JTabbedPane;
+import javax.swing.border.LineBorder;
+import javax.swing.JTable;
 
 public class Admin_Charts {
 
@@ -52,6 +59,10 @@ public class Admin_Charts {
 	JSONArray Labellist;
 	 JSONArray vallist;
 	 JLabel lblChart;
+	 private JTabbedPane tabbedPane;
+	 private JPanel panel_1;
+	 private JPanel panelTable;
+	 private JTable table;
 	 
 
 	/**
@@ -94,14 +105,18 @@ public class Admin_Charts {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 900, 550);
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setBackground(Color.WHITE);
+		frame.setBounds(100, 100, 1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		
 		panel = new JPanel();
-		panel.setBounds(0, 0, 350, 550);
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(30, 30, 330, 520);
 		frame.getContentPane().add(panel);
+		list.setBackground(Color.WHITE);
 		list.setBounds(1, 1, 318, 508);
 		//list.setBounds(-226, 6, 300, 360);
 		
@@ -110,9 +125,9 @@ public class Admin_Charts {
 		
 		list.setFont(new Font("Arial", Font.PLAIN, 12));
 		list.setFixedCellHeight(40);
-		list.setFixedCellWidth(300);
+		list.setFixedCellWidth(450);
 		list.setSelectionBackground(new Color(162, 217, 206 ));
-		
+		list.setBorder(new EmptyBorder(10,10, 10, 10));
 		
 
 		
@@ -137,9 +152,6 @@ public class Admin_Charts {
 		 list.setModel(data);
 		 
 		
-		  
-		 
-		
 		
 	        list.addListSelectionListener(new ListSelectionListener() {
 
@@ -156,16 +168,18 @@ public class Admin_Charts {
 	                		//panel.remove(lblChart);
 	                		
 	                		int qid =Questions.get(list.getSelectedIndex()).getQID();
-	                		System.out.println(qid);
+	                		
 	                		List <ChartData> chartData= new ArrayList();
 	                		chartData=Qinterface.getChartData(qid);
 		                	for(int i=0;i<chartData.size();i++) {
-		                		System.out.println(chartData.get(i).getAnswer()+"  here");
+		                		
 		                		Labellist.add(chartData.get(i).getAnswer());
 		                		vallist.add(chartData.get(i).getCount());
 		                		
 		                		
+		                		
 		                	}
+		                	TableData(chartData);
 		                	createChart();
 		                	frame.revalidate();
 		                	panel.revalidate();
@@ -191,31 +205,100 @@ public class Admin_Charts {
 		  
 		  
 		  JPanel panelChart = new JPanel();
-		  panelChart.setBounds(350, 0, 535, 510);
-		  frame.getContentPane().add(panelChart);
+		  panelChart.setBorder(null);
+		  panelChart.setBackground(Color.WHITE);
+		  panelChart.setBounds(380, 30, 535, 510);
+		  //frame.getContentPane().add(panelChart);
 		  panelChart.setLayout(new FlowLayout());
 		  
 		  lblChart = new JLabel("\r\n");		
 		  lblChart.setBounds(0, 0, 535, 510);
 		  panelChart.add(lblChart);
+		  
+		  tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		  tabbedPane.setBorder(null);
+		  tabbedPane.setBackground(Color.WHITE);
+		  tabbedPane.setBounds(369, 10, 570, 530);
+		  frame.getContentPane().add(tabbedPane);
+		  
+		  panel_1 = new JPanel();
+		  tabbedPane.addTab("Chart", null, panelChart, null);
+		  tabbedPane.setEnabledAt(0, true);
+		  tabbedPane.setBackgroundAt(0, Color.WHITE);
+		  
+		  panelTable = new JPanel();
+		  panelTable.setBorder(null);
+		  panelTable.setBackground(Color.WHITE);
+		  tabbedPane.addTab("Table", null, panelTable, null);
+		  panelTable.setLayout(null);
+		  
+		  table = new JTable();
+		  table.setBackground(Color.WHITE);
+		  table.setBounds(30, 30, 500, 300);
+		  JScrollPane scrollPane1 = new JScrollPane(table);
+		  tabbedPane.setEnabledAt(1, true);
+		  tabbedPane.setBackgroundAt(1, Color.WHITE);
+		  
+		  scrollPane1.setBounds(30, 30, 500, 200);
+		  scrollPane1.setBorder(BorderFactory.createLineBorder(Color.lightGray)); 
+		  //scrollPane1.setPreferredSize(new Dimension(500, 400));
+		  scrollPane1.getViewport().setBackground(Color.white);
+		  panelTable.add(scrollPane1);
+		  
+		
 	
 	}
 
 	void createChart(){
 	
+		JSONArray bg=new JSONArray();
+		bg.add("rgb(255, 99, 132)");
+		bg.add("rgb(255, 159, 64)");
+		bg.add("rgb(255, 205, 86)");
+		bg.add("rgb(75, 192, 192)");
+		bg.add("rgb(54, 162, 235)");
 		
 		
-	
+		
+		String message;
+		JSONObject json = new JSONObject();
+		json.put("type", "donut");
+
+
+
+		JSONArray datasets = new JSONArray();
+		JSONObject item = new JSONObject();
+		item.put("data", vallist);
+		item.put("backgroundColor",bg);
+		item.put("label", "Answers");
+		datasets.add(item);
+
+		JSONObject data = new JSONObject();
+		data.put("datasets",datasets);
+		data.put("labels",Labellist);
+
+
+		json.put("data", data);
+
+		message = json.toString();
+		System.out.println(json);
+		
+		/*JSONObject backgroundcolor=new JSONObject();
+		backgroundcolor.put("backgroundColor", bg);
+		
+		
 		 JSONObject label=new JSONObject();
-		 label.put("label", "Users");
+		 label.put("label", "Answers");
 		 
 		 JSONObject data1=new JSONObject();
 		 data1.put("data", vallist);
 		 
 					
 		JSONArray datasets=new JSONArray();
-		datasets.add(label);
+		
 		datasets.add(data1); //new JSONObject().put("datasets",datasets)
+		datasets.add(label);
+		datasets.add(backgroundcolor);
 		
 		JSONObject data=new JSONObject();	
 		data.put("labels", Labellist);
@@ -229,26 +312,43 @@ public class Admin_Charts {
 		main.put("type", "bar");
 		
 		
-		System.out.println(main); 
+		System.out.println(main);*/ 
 		
 		
 		
 		/*{
-			  type: 'bar',                                // Show a bar chart
-			  data: {
-			  --  labels: [2012, 2013, 2014, 2015, 2016],   // Set X-axis labels
-			    datasets: [{
-			     -- label: 'Users',                         // Create the 'Users' dataset
-			     -- data: [120, 60, 50, 180, 120]           // Add data to the chart
-			    }]
-			  }
-			}
-		
-		*/
+				  type: 'doughnut',
+				  data: {
+				    datasets: [
+				      {
+				        data: [94, 25, 72, 70, 14],
+				        backgroundColor: [
+				          'rgb(255, 99, 132)',
+				          'rgb(255, 159, 64)',
+				          'rgb(255, 205, 86)',
+				          'rgb(75, 192, 192)',
+				          'rgb(54, 162, 235)',
+				        ],
+				        label: 'Dataset 1',
+				      },
+				    ],
+				    labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+				  },
+				  options: {
+				    title: {
+				      display: true,
+				      text: 'Chart.js Doughnut Chart',
+				    },
+				  },
+				}
+				
+						
+						*/
+	
 		
 		String chartUrl =
 			    "https://quickchart.io/chart?bkg=white&width=250&height=200&chart=" +
-			    URLEncoder.encode(main.toJSONString(), StandardCharsets.UTF_8);
+			    URLEncoder.encode(json.toJSONString(), StandardCharsets.UTF_8);
 		URL chartimg;
 		try {
 			chartimg = new URL(chartUrl);
@@ -263,5 +363,20 @@ public class Admin_Charts {
 			System.out.print(e);
 			e.printStackTrace();
 		}
+	}
+	
+	void TableData(List<ChartData> cd) {
+		Object tbl_Data[][]= new Object[cd.size()][2];
+		
+		for(int i=0;i<cd.size();i++) {
+			
+			 tbl_Data[i][0]=cd.get(i).getAnswer();
+			 tbl_Data[i][1]=cd.get(i).getCount();
+				
+		}
+		
+		
+		DefaultTableModel dTableModel = new DefaultTableModel(tbl_Data,new String[]{"Answer","Count"});
+		table.setModel(dTableModel);
 	}
 }

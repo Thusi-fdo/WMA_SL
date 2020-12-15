@@ -17,6 +17,7 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -81,6 +82,7 @@ public class Survey_Questions {
 				//frame.repaint();
 				
 				int qid = setQuestion(question_number);	
+				comboOptions.setBackground(Color.WHITE);
 				comboOptions.addActionListener(new ActionListener() {
 					int x=0;
 					public void actionPerformed(ActionEvent e) {
@@ -130,9 +132,10 @@ public class Survey_Questions {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		UIManager.put("Button.background", Color.white);
 		
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(0, 0, 735, 417);
+		panel.setBounds(0, 0, 735, 220);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
@@ -201,7 +204,7 @@ public class Survey_Questions {
 			}
 		});
 		btnNext.setFont(new Font("SansSerif", Font.BOLD, 16));
-		btnNext.setBounds(606, 311, 85, 21);
+		btnNext.setBounds(606, 150, 85, 21);
 		panel.add(btnNext);
 		
 		JButton btnBack = new JButton("Back");
@@ -229,7 +232,7 @@ public class Survey_Questions {
 			}
 		});
 		btnBack.setFont(new Font("SansSerif", Font.BOLD, 16));
-		btnBack.setBounds(496, 311, 85, 21);
+		btnBack.setBounds(496, 150, 85, 21);
 		panel.add(btnBack);
 		
 		JLabel lblNewLabel = new JLabel("Questions");
@@ -242,10 +245,18 @@ public class Survey_Questions {
 		lbl_Q1.setBounds(37, 54, 532, 24);
 		panel.add(lbl_Q1);
 		
+		JPanel panelBg = new JPanel();
+		panelBg.setBackground(Color.WHITE);
+		panelBg.setBounds(0, 220, 735, 200);
+		frame.getContentPane().add(panelBg);
+		panelBg.setLayout(null);
+		
 		JLabel lblNewLabel_4 = new JLabel("");
-		lblNewLabel_4.setIcon(new ImageIcon("C:\\Users\\asus\\Downloads\\bgnew.jpg"));
-		lblNewLabel_4.setBounds(0, 0, 734, 419);
-		panel.add(lblNewLabel_4);
+		lblNewLabel_4.setIcon(new ImageIcon(Survey_Questions.class.getResource("/Images/bgnew2.jpg")));
+		lblNewLabel_4.setBounds(-35, -51, 800, 241);
+		panelBg.add(lblNewLabel_4);
+		
+		
 	}
 	
 public int setQuestion(int count) {
@@ -270,12 +281,16 @@ public int setQuestion(int count) {
 		comboOptions.setBounds(34, 100,300, 24);		
 		comboOptions.setFont(new Font("SansSerif", Font.BOLD, 16));
 		comboOptions.setModel(new DefaultComboBoxModel(options));
+	
 		
 		
 		
 		
 		//Question_Panel.add(comboOptions);
 		panel.add(comboOptions);
+		
+
+		
 		comboOptions.setVisible(true);
 		return quesArray.get(count).getQID();
 		}
@@ -300,6 +315,4 @@ public int setQuestion(int count) {
 			return 0;
 		}		
 	}
-	
-	
 }

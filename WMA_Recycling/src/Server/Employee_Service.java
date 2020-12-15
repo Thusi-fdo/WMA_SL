@@ -11,17 +11,18 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Code.Login;
-import Code.LoginInterface;
-import Code.Resident;
+import Code.Employee;
+import Code.EmployeeInterface;
 
 
-public class LoginService extends UnicastRemoteObject implements LoginInterface{
+
+
+public class Employee_Service extends UnicastRemoteObject implements EmployeeInterface {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5279563966281803277L;
+	private static final long serialVersionUID = -2919560986572723893L;
 	private String sessionCookie = "abc"+Math.random();
 	private Connection conn;
 	private Statement st;
@@ -29,7 +30,8 @@ public class LoginService extends UnicastRemoteObject implements LoginInterface{
 	private PreparedStatement ps;
 	private final String URL = "jdbc:mysql://localhost:3306/wma_db?user=root&password=";
 	
-	protected LoginService() throws RemoteException {
+	protected Employee_Service() throws RemoteException {
+		super();
 		try {
 
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -38,21 +40,22 @@ public class LoginService extends UnicastRemoteObject implements LoginInterface{
 		}
 
 		catch (ClassNotFoundException ex) {
-			Logger.getLogger(LoginService.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Employee_Service.class.getName()).log(Level.SEVERE, null, ex);
 
 		} catch (SQLException ex) {
-			Logger.getLogger(LoginService.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Employee_Service.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+	
 
 	@Override
-	public String login(Login login) throws RemoteException {
+	public String login(String username, String password) throws RemoteException {
 		try {
-			ps = conn.prepareStatement("select * from resident");
+			ps = conn.prepareStatement("select * from employee");
 			rs = ps.executeQuery();
 			while (rs.next()){
-				if (rs.getString("NIC").equals(login.getNIC()) && rs.getString("Password").equals(login.getPassword())){					
-					Resident.setNIC( rs.getString("NIC"));                 	
+				if (rs.getString("Email").equals(username) && rs.getString("Password").equals(password)){					
+					Employee.seteID( rs.getInt("Employee_ID"));                 	
 					sessionCookie = "xyz"+Math.random(); 
 					return sessionCookie; 
 				}
@@ -69,8 +72,7 @@ public class LoginService extends UnicastRemoteObject implements LoginInterface{
 	@Override
 	public String logout(String cookie) throws RemoteException {
 		sessionCookie = "abc"+Math.random(); 
-		return "logout successful";    //things resident can do
+		return "logout successful";    
 	}
-
 
 }

@@ -13,14 +13,14 @@ import java.util.logging.Logger;
 
 import Code.Resident;
 import Code.ResidentInterface;
-import Database.Database_Connection;
+
 
 public class ResidentService extends UnicastRemoteObject implements ResidentInterface {
 	private Connection conn;
 	private Statement st;
 	private ResultSet rs;
 	private PreparedStatement ps;
-	private static Database_Connection instance;
+	
 	private final String URL = "jdbc:mysql://localhost:3306/wma_db?user=root&password=";	
 	
 	protected ResidentService() throws RemoteException {
@@ -32,10 +32,10 @@ public class ResidentService extends UnicastRemoteObject implements ResidentInte
 		}
 		
 		catch (ClassNotFoundException ex) {
-	        Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(ResidentService.class.getName()).log(Level.SEVERE, null, ex);
 	
 	    } catch (SQLException ex) {
-	        Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(ResidentService.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
 
@@ -100,17 +100,17 @@ public class ResidentService extends UnicastRemoteObject implements ResidentInte
 	}
 
 	@Override
-	public boolean CreateResident(Resident r) throws RemoteException {
+	public boolean CreateResident(Resident r,String nic) throws RemoteException {
 		String Query = "INSERT INTO `resident`(`NIC`, `Name`, `Email`, `Password`, `Address`, `City`, `Subarea`) VALUES ('"
-    			+r.getNIC()+"','"+r.getResidentName()+"','"+r.getEmail()+"','"+r.getPassword()+"','"+r.getAddress()+"','"+r.getCity()+"','"+r.getSubarea()+"')";
-    	System.out.println(r.getNIC());
+    			+nic+"','"+r.getResidentName()+"','"+r.getEmail()+"','"+r.getPassword()+"','"+r.getAddress()+"','"+r.getCity()+"','"+r.getSubarea()+"')";
+    	System.out.println(nic);
 		try {
-            //Statement st = conn.createStatement();
-            //int result = st.executeUpdate(Query);
-            //return (result > 0);
-            return true;
+            Statement st = conn.createStatement();
+            int result = st.executeUpdate(Query);
+            return (result > 0);
+           
         } catch (Exception ex) {
-            Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ResidentService.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
 	}

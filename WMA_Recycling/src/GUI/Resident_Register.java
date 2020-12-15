@@ -32,7 +32,7 @@ import java.awt.event.ActionEvent;
 
 public class Resident_Register {
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField txt_Name;
 	private JTextField txt_Email;
 	private JTextField txt_NIC;
@@ -110,7 +110,7 @@ public class Resident_Register {
 					String subArea= (String)comboSubarea.getSelectedItem();
 					String Address= txt_address.getText();
 					
-					
+					//System.out.println(NIC);
 					if(!Resident.valEmail(email)) {
 						JOptionPane.showMessageDialog(null, "Please insert a valid email address","Error", JOptionPane.ERROR_MESSAGE);
 					}
@@ -121,11 +121,21 @@ public class Resident_Register {
 						JOptionPane.showMessageDialog(null, "Password should contain atleast 8 characters, 1 lower case, 1 upper case, 1 special charater and no white-spaces","Error", JOptionPane.ERROR_MESSAGE);
 					}
 					else {
-					Resident.setNIC(NIC);
-					Resident res= new Resident(ResName, email, pwd,area, subArea, Address);
-					System.out.println(Resident.getNIC());
 					
-					RI.CreateResident(res);
+					Resident res= new Resident(ResName, email, pwd,area, subArea, Address);
+					//res.setNIC(NIC);
+					//System.out.println(Resident.getNIC());
+					
+					boolean created= RI.CreateResident(res,NIC);
+					if(created) {
+						JOptionPane.showMessageDialog(null, "Hello!"+ResName+"Account has been successfully created","Success", JOptionPane.DEFAULT_OPTION);
+						Resident_Dashboard window = new Resident_Dashboard();
+						window.frame.setVisible(true);
+						frame.dispose();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Sorry!"+ResName+"There was an unexpected error, try again","Error", JOptionPane.ERROR_MESSAGE);
+					}
 					}
 				}
 				catch(Exception ex)

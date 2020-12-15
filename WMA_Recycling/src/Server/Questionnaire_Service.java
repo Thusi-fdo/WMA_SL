@@ -17,7 +17,7 @@ import Code.ChartData;
 import Code.Question;
 import Code.QuestionInterface;
 import Code.Resident;
-import Database.Database_Connection;
+
 
 public class Questionnaire_Service extends UnicastRemoteObject implements QuestionInterface {
 
@@ -40,10 +40,10 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
 		}
 		
 		catch (ClassNotFoundException ex) {
-	        Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(Questionnaire_Service.class.getName()).log(Level.SEVERE, null, ex);
 	
 	    } catch (SQLException ex) {
-	        Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(Questionnaire_Service.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
 
@@ -186,7 +186,7 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
 	            	 success=true;
 	             }
 	         } catch (SQLException ex) {
-	             Logger.getLogger(Database_Connection.class.getName()).log(Level.SEVERE, null, ex);
+	             Logger.getLogger(Questionnaire_Service.class.getName()).log(Level.SEVERE, null, ex);
 	             success= false;
 	         }
 	      } 
@@ -223,7 +223,7 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
             rs = ps.executeQuery();
             while(rs.next()){
 				Choice=rs.getString("Answer");
-				System.out.println(Choice);
+				//System.out.println(Choice);
 				count= rs.getInt("count(Answer)");	
 				chartData.add(new ChartData(Choice,count));			 
 			  }                  
@@ -237,6 +237,13 @@ public class Questionnaire_Service extends UnicastRemoteObject implements Questi
             e.printStackTrace();
             return null;
             }
+	}
+
+	@Override
+	public boolean DeletingQuestion(int qid) throws RemoteException {
+		String Query="DELETE FROM `survey_question` WHERE `QID`="+qid;
+		return QueryExecuter(Query);
+		
 	}
 
 	

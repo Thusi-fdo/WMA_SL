@@ -23,4 +23,6 @@ public interface QuestionInterface extends Remote {
     
     public List<ChartData> getChartData(int qid)throws RemoteException;
 
+	public boolean DeletingQuestion(int qid) throws RemoteException;
+
 }

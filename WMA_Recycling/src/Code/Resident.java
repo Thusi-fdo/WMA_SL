@@ -10,7 +10,7 @@ public class Resident implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5655719722214019601L;
-	private static String NIC;
+	static String NIC;
 	private String ResidentName;
 	private String Email;
 	private String Password;

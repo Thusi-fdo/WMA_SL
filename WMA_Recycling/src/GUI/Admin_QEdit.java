@@ -56,6 +56,8 @@ public class Admin_QEdit {
     JTable table2;
     JPanel ui;
     List<Question> qArray;
+    DefaultTableModel TableModelOptions;
+    DefaultTableModel TableModelQuestions;
     
 
 	/**
@@ -148,12 +150,13 @@ public class Admin_QEdit {
 	        				String AddQuestion = JOptionPane.showInputDialog(f,"Add Question");
 	        				if(AddQuestion!=null) {
 	        					try {
-									Qinterface.AddingQuestion(AddQuestion);
-									displayQuestion();
-							
-									f.remove(gui);
-									f.getContentPane().add(gui, BorderLayout.LINE_START);
-									f.revalidate();
+									Qinterface.AddingQuestion(AddQuestion); // update DB
+									
+									//update qArray
+									qArray=Qinterface.PrepareQuestions(); //--
+									
+									//update table
+									TableModelQuestions.insertRow(TableModelQuestions.getRowCount(),new Object[] {AddQuestion});
 								} catch (RemoteException e1) {
 									System.out.println(e1);
 									e1.printStackTrace();
@@ -167,6 +170,40 @@ public class Admin_QEdit {
 	        	}
 	        	{
 	        		JButton BtnDel = new JButton("Delete");
+	        		BtnDel.addActionListener(new ActionListener() {
+	        			public void actionPerformed(ActionEvent e) {
+	        				
+	        				if(table.getSelectedRow()!=-1) {
+		        				try {
+		        					
+		        					int result = JOptionPane.showConfirmDialog(f, "Are you sure you want to delete this question?");
+									if(result==0)
+									{
+										
+											
+											
+											
+											int qid =qArray.get(table.getSelectedRow()).getQID();
+											
+											Qinterface.DeletingQuestion(qid); //removing from db
+											
+											//update qArray
+											
+											qArray=Qinterface.PrepareQuestions();
+																
+											//update table
+											TableModelQuestions.removeRow(table.getSelectedRow());
+											
+											
+											
+									}
+								} catch (RemoteException e1) {
+									System.out.println(e1);
+									e1.printStackTrace();
+								}
+		        				}
+	        			}
+	        		});
 	        		BtnDel.setBackground(new Color(0, 128, 0));
 	        		panel_Button.add(BtnDel);
 	        	}
@@ -185,20 +222,17 @@ public class Admin_QEdit {
 		        				if(AddAnswer!=null) {
 		        					try {
 										
-		        						Qinterface.AddingChoices(AddAnswer, qArray.get(table.getSelectedRow()).getQID());
-		        						
-		        						int tbl_row=table.getSelectedRow();
-										
-		        						
-										
-										displayQuestion();
-										
-																		
-										displayAnswers(qArray.get(tbl_row).getChoices());
-										
-										f.getContentPane().add(gui, BorderLayout.LINE_START);
-										//table.addRowSelectionInterval(tbl_row, tbl_row);
-										f.revalidate();
+		        						Qinterface.AddingChoices(AddAnswer, qArray.get(table.getSelectedRow()).getQID()); //saving to DB
+		        						String currentchoices[]=qArray.get(table.getSelectedRow()).getChoices();		        						
+		        						String newchoices[]=new String[currentchoices.length+1];
+		        						for(int i=0;i<currentchoices.length;i++) {
+		        							newchoices[i]=currentchoices[i];
+		        						}
+		        						newchoices[newchoices.length-1]=AddAnswer;
+		        						qArray.get(table.getSelectedRow()).setChoices(newchoices); //updating qArray
+		        						TableModelOptions.insertRow(TableModelOptions.getRowCount(), new Object[] {AddAnswer}); //new row to the table
+		        						//table2.add(TableModelOptions);
+		        				        
 									
 										
 										
@@ -233,15 +267,15 @@ public class Admin_QEdit {
 										String option=(String)table2.getValueAt(table2.getSelectedRow(), table2.getSelectedColumn());
 										int qid =qArray.get(table.getSelectedRow()).getQID();
 										
-										Qinterface.DeletingChoices(option,qid);
+										Qinterface.DeletingChoices(option,qid); //removing from db
 										
+										//update qArray
+										String newchoices[]=Qinterface.GetOptions(qid);
+										qArray.get(table.getSelectedRow()).setChoices(newchoices);
+															
+										//update table
+										TableModelOptions.removeRow(table2.getSelectedRow());
 										
-										displayQuestion();					
-										displayAnswers(qArray.get(tbl_row).getChoices());										
-										//table.addRowSelectionInterval(tbl_row, tbl_row);
-										table2.clearSelection();
-										table.clearSelection();
-										f.revalidate();
 										
 										
 								}
@@ -307,7 +341,9 @@ public class Admin_QEdit {
 	            tableData[i][0] = qArray.get(i).getQuestion();
 	        }
 	        String[] header = {"Questions"};
-	        table = new JTable(tableData, header);
+	        TableModelQuestions= new DefaultTableModel(tableData,header);
+	        //table = new JTable(tableData, header);
+	        table = new JTable(TableModelQuestions);
 	        table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 	        gui.add(new JScrollPane(table));
 	        sorter = new TableRowSorter(table.getModel());
@@ -375,7 +411,9 @@ public class Admin_QEdit {
 	            tableData[i][0] = choices[i];
 	        }
 	        String[] header = {"Fonts"};
-	        table2 = new JTable(tableData, header);
+	        TableModelOptions = new DefaultTableModel(tableData,header);
+	        table2 = new JTable(TableModelOptions);
+	        //table2 = new JTable(tableData, header);
 	        
             Dimension d = table2.getPreferredScrollableViewportSize();
             table2.setPreferredScrollableViewportSize(new Dimension(d.width/2,d.height));

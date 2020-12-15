@@ -8,5 +8,5 @@ public interface ResidentInterface extends Remote {
     
 	public String[] getSubAreaList(int Subarea_Index) throws RemoteException;
     
-    public boolean CreateResident(Resident r) throws RemoteException;
+    public boolean CreateResident(Resident r,String nic) throws RemoteException;
 }
