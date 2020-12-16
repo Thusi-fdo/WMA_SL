@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import Code.EmployeeInterface;
 import Code.Login;
 import Code.LoginInterface;
+import Code.sessionCookie;
 
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -119,8 +120,8 @@ public class Admin_Login {
 					 } else { 
 							mySessionCookie = capResults; 
 							System.out.println("Your login was successful.");
-
-			            	Admin_Dashboard window = new Admin_Dashboard();
+							sessionCookie.setCookie(mySessionCookie);
+			            	Admin_Charts window = new Admin_Charts();
 							window.frame.setVisible(true);
 							frame.dispose();
 						}

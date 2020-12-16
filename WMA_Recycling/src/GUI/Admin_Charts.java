@@ -44,14 +44,18 @@ import org.json.simple.JSONStreamAware;
 import Code.ChartData;
 import Code.Question;
 import Code.QuestionInterface;
+import Code.sessionCookie;
 import Server.Questionnaire_Service;
 import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JTable;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Admin_Charts {
 
-	private JFrame frame;
+	JFrame frame;
 	JList list = new JList();
 	List<Question> Questions;
 	QuestionInterface Qinterface;
@@ -114,7 +118,7 @@ public class Admin_Charts {
 		
 		panel = new JPanel();
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(30, 30, 330, 520);
+		panel.setBounds(30, 95, 330, 450);
 		frame.getContentPane().add(panel);
 		list.setBackground(Color.WHITE);
 		list.setBounds(1, 1, 318, 508);
@@ -199,7 +203,7 @@ public class Admin_Charts {
 		  
 		  panel.add(list);
 		  JScrollPane scrollPane = new JScrollPane(list);
-		  scrollPane.setBounds(0, 0, 320, 511);
+		  scrollPane.setBounds(0, 0, 320, 450);
 		  panel.add(scrollPane);
 		  
 		  
@@ -218,7 +222,7 @@ public class Admin_Charts {
 		  tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		  tabbedPane.setBorder(null);
 		  tabbedPane.setBackground(Color.WHITE);
-		  tabbedPane.setBounds(369, 10, 570, 530);
+		  tabbedPane.setBounds(369, 75, 570, 475);
 		  frame.getContentPane().add(tabbedPane);
 		  
 		  panel_1 = new JPanel();
@@ -244,6 +248,47 @@ public class Admin_Charts {
 		  //scrollPane1.setPreferredSize(new Dimension(500, 400));
 		  scrollPane1.getViewport().setBackground(Color.white);
 		  panelTable.add(scrollPane1);
+		  
+		  JPanel navBar = new JPanel();
+		  navBar.setForeground(Color.WHITE);
+		  navBar.setBackground(Color.DARK_GRAY);
+		  navBar.setBounds(0, 0, 1000, 50);
+		  frame.getContentPane().add(navBar);
+		  navBar.setLayout(null);
+		  
+		  JButton btnUser = new JButton("Log Out");
+		  btnUser.addActionListener(new ActionListener() {
+		  	public void actionPerformed(ActionEvent e) {
+		  		sessionCookie.setCookie(null);
+				Admin_Login window = new Admin_Login();
+				window.frame.setVisible(true);
+				frame.dispose();
+		  	}
+		  });
+		  btnUser.setBackground(Color.WHITE);
+		  //btnUser.setContentAreaFilled(false);
+		  btnUser.setIcon(new ImageIcon(Admin_Charts.class.getResource("/Images/user1.png")));
+		  btnUser.setFont(new Font("Arial", Font.PLAIN, 13));
+		  btnUser.setBounds(850, 5, 130, 40);
+		  navBar.add(btnUser);
+		  
+		  JButton btnChart = new JButton("Chart");
+		  btnChart.setFont(new Font("Arial", Font.PLAIN, 13));
+		  btnChart.setBounds(36, 5, 85, 40);
+		  navBar.add(btnChart);
+		  
+		  JButton btnNewButton_1 = new JButton("Edit Questions");
+		  btnNewButton_1.addActionListener(new ActionListener() {
+		  	public void actionPerformed(ActionEvent e) {
+		  		Admin_QEdit window = new Admin_QEdit(false);
+		  		window.f.setVisible(true);
+		  		frame.dispose();
+		  		
+		  	}
+		  });
+		  btnNewButton_1.setFont(new Font("Arial", Font.PLAIN, 13));
+		  btnNewButton_1.setBounds(145, 5, 130, 40);
+		  navBar.add(btnNewButton_1);
 		  
 		
 	

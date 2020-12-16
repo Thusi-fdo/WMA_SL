@@ -14,6 +14,7 @@ import Code.Login;
 import Code.LoginInterface;
 import Code.QuestionInterface;
 import Code.Resident;
+import Code.sessionCookie;
 import Database.Login_Query;
 import java.sql.*;
 
@@ -32,7 +33,7 @@ import java.awt.event.ActionEvent;
 
 public class Resident_Login {
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField txt_NIC;
 	private JPasswordField pwd_login;
 	LoginInterface LI;
@@ -147,6 +148,7 @@ public class Resident_Login {
 			                txt_NIC.grabFocus();
 					 } else { 
 							mySessionCookie = capResults; 
+							sessionCookie.setCookie(mySessionCookie);
 							System.out.println("Your login was successful.");
 
 			            	Resident_Dashboard window = new Resident_Dashboard();

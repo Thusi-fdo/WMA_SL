@@ -24,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 
 import Code.Question;
 import Code.QuestionInterface;
+import Code.sessionCookie;
 import Database.Question_Query;
 
 import java.awt.event.ActionListener;
@@ -83,6 +84,17 @@ public class Survey_Questions {
 				
 				int qid = setQuestion(question_number);	
 				comboOptions.setBackground(Color.WHITE);
+				
+				JButton btnlogOut = new JButton("logout");
+				btnlogOut.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						sessionCookie.setCookie(null);
+						Resident_Login window = new Resident_Login();
+						window.frame.setVisible(true);
+					}
+				});
+				btnlogOut.setBounds(606, 20, 85, 21);
+				panel.add(btnlogOut);
 				comboOptions.addActionListener(new ActionListener() {
 					int x=0;
 					public void actionPerformed(ActionEvent e) {

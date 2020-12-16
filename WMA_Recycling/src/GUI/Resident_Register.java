@@ -9,9 +9,12 @@ import javax.swing.JPanel;
 import java.awt.Font;
 import javax.swing.JTextField;
 
+import Code.Login;
+import Code.LoginInterface;
 import Code.QuestionInterface;
 import Code.Resident;
 import Code.ResidentInterface;
+import Code.sessionCookie;
 import Database.Register_Query;
 
 import java.sql.*;
@@ -45,6 +48,7 @@ public class Resident_Register {
 	String subareaList[];
 	Register_Query rq = new Register_Query();
 	ResidentInterface RI;
+	LoginInterface LI;
 
 	/**
 	 * Launch the application.
@@ -69,6 +73,7 @@ public class Resident_Register {
 		
 		try {
 			RI = (ResidentInterface) Naming.lookup("rmi://localhost:1968/ResServer");
+			LI = (LoginInterface) Naming.lookup("rmi://localhost:1968/LoginServer");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			System.out.println(e);
 			e.printStackTrace();
@@ -129,7 +134,10 @@ public class Resident_Register {
 					boolean created= RI.CreateResident(res,NIC);
 					if(created) {
 						JOptionPane.showMessageDialog(null, "Hello!"+ResName+"Account has been successfully created","Success", JOptionPane.DEFAULT_OPTION);
-						Resident_Dashboard window = new Resident_Dashboard();
+						
+						String mysessioncookie= LI.login(new Login(NIC,pwd));
+						sessionCookie.setCookie(mysessioncookie);
+						Survey_Questions window = new Survey_Questions();
 						window.frame.setVisible(true);
 						frame.dispose();
 					}

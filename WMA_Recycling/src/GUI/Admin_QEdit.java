@@ -31,6 +31,7 @@ import javax.swing.text.Document;
 
 import Code.Question;
 import Code.QuestionInterface;
+import Code.sessionCookie;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -38,6 +39,8 @@ import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JToolBar;
 
 
 
@@ -116,7 +119,7 @@ public class Admin_QEdit {
         //Admin_QEdit o2 = new Admin_QEdit(false);
 
         f = new JFrame("Question Editor");
-        f.setBounds(100,100,850,550);
+        f.setBounds(100,100,1000,600);
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        // f.setLocationByPlatform(true);
 
@@ -293,6 +296,48 @@ public class Admin_QEdit {
 	        		panel_Button.add(BtnDelAns);
 	        	}
 	        }
+	        {
+	        	JPanel navBar = new JPanel();
+	        	navBar.setBackground(Color.DARK_GRAY);
+	        	f.getContentPane().add(navBar, BorderLayout.NORTH);
+	        	navBar.setPreferredSize(new Dimension(1000,50));
+	        	navBar.setLayout(null);
+	        	{
+	        		JButton btnUser = new JButton("Log Out");
+	        		btnUser.addActionListener(new ActionListener() {
+	        			public void actionPerformed(ActionEvent e) {
+	        				sessionCookie.setCookie(null);
+	        				Admin_Login window = new Admin_Login();
+	        				window.frame.setVisible(true);
+	        				f.dispose();
+
+	        			}
+	        		});
+	        		btnUser.setFont(new Font("Arial", Font.PLAIN, 13));
+	        		btnUser.setBackground(Color.WHITE);
+	        		btnUser.setBounds(850, 5, 130, 40);
+	        		navBar.add(btnUser);
+	        	}
+	        	{
+	        		JButton btnNewButton_1 = new JButton("Edit Questions");
+	        		btnNewButton_1.setFont(new Font("Arial", Font.PLAIN, 13));
+	        		btnNewButton_1.setBounds(150, 5, 130, 40);
+	        		navBar.add(btnNewButton_1);
+	        	}
+	        	{
+	        		JButton btnChart = new JButton("Chart");
+	        		btnChart.addActionListener(new ActionListener() {
+	        			public void actionPerformed(ActionEvent e) {
+	        				Admin_Charts window = new Admin_Charts();
+	        				window.frame.setVisible(false);
+	        				f.dispose();
+	        			}
+	        		});
+	        		btnChart.setFont(new Font("Arial", Font.PLAIN, 13));
+	        		btnChart.setBounds(5, 5, 85, 40);
+	        		navBar.add(btnChart);
+	        	}
+	        }
 	        
 		} catch (Exception e1) {
 			System.out.println(e1);
@@ -329,7 +374,7 @@ public class Admin_QEdit {
 		
 		gui = new JPanel(new BorderLayout(4, 4));
         gui.setBorder(new EmptyBorder(4, 4, 4, 4));
-
+        
       /*  GraphicsEnvironment ge
                 = GraphicsEnvironment.getLocalGraphicsEnvironment();
         String[] fonts = ge.getAvailableFontFamilyNames();*/
@@ -453,6 +498,4 @@ public class Admin_QEdit {
 		}
 		
 	}
-
-
 }
